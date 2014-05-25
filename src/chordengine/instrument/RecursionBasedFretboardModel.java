@@ -20,10 +20,14 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 
 	public void setChord(Chord c) {
 		chord = c;
+		
+		// Changing the chord means the included notes change
 		updateInChord();
+		
+		// Find all fingerings for the new chord
 		calculateChords();
 	}
-	
+
 	public void setMinFret(int f) {
 		minFret = f;
 		calculateChords();
@@ -49,7 +53,8 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 	}
 	
 	public void addCapo() {
-		frets: for (int fret = 1; fret<instrument.frets; ++fret) {
+		// Find the lowest fret that does not have a capo already
+		frets: for (int fret = 1; fret < instrument.frets; ++fret) {
 			for (Capo otherCapo : capos) {
 				if (otherCapo.getFret() == fret)
 					continue frets;
@@ -148,11 +153,15 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		}
 	}
 
+	/**
+	 * The int-value of the note at a position on the fretboard
+	 */
 	private int note(int string, int fret) {
-		return fret+instrument.tuning[string];
+		return fret + instrument.tuning[string];
 	}
 
 	private void calculateChords() {
+		// Find all points on the neck that *could* be included in a chord
 		ArrayList<StringFret> fingerOptions = new ArrayList<StringFret>();
 		for (int s = 0; s<instrument.strings; ++s) {
 			for (int f = 0; f<=instrument.frets; ++f) {
@@ -165,12 +174,12 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		ChordFingering base = ChordFingering.trivialChordFingering(instrument.strings);
 
 		// Find the open strings which could be included in a chord.
-		ArrayList<Integer> chordengineList = new ArrayList<Integer>();
+		ArrayList<Integer> openStringList = new ArrayList<Integer>();
 		for (int s = 0; s<instrument.tuning.length; ++s) {
 			if (hasNoteAt(s, highestCapoedFrets[s]))
-				chordengineList.add(s);
+				openStringList.add(s);
 		}
-		openStringPatterns = openStringCombinations(instrument.strings, chordengineList);
+		openStringPatterns = openStringCombinations(instrument.strings, openStringList);
 
 		// Try to make wholly-open chords
 		for (boolean[] pattern : openStringPatterns) {
@@ -255,16 +264,28 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		chords.setChords(chordFingerings.toArray(new ChordFingering[chordFingerings.size()]));
 	}
 	
-	private ArrayList<StringFret> removeIllegal(ArrayList<StringFret> options, StringFret sf, int finger) {
+	/**
+	 * Removes all StringFret positions that cannot physically be fingered
+	 * 
+	 * With the addition of latestFinger in a chord shape, the legal positions
+	 * can be narrowed down based on how the hand can stretch.
+	 */
+	private ArrayList<StringFret> removeIllegal(ArrayList<StringFret> options, StringFret latestFinger, int finger) {
 		ArrayList<StringFret> toreturn = new ArrayList<StringFret>();
 		for (StringFret current : options) {
-			if (current.fret < sf.fret)
+			if (current.fret < latestFinger.fret)
 				continue;
-			if (current.fret-sf.fret > 2)
+			
+			// Cannot stretch more than two frets
+			if (current.fret-latestFinger.fret > 2)
 				continue;
-			if (current.string == sf.string)
+			
+			// Cannot put a finger on the same string twice
+			if (current.string == latestFinger.string)
 				continue;
-			if (finger < 4 && current.string > sf.string && current.fret == sf.fret)
+			
+			// Only finger 4 can reach the same fret on a higher-numbered string
+			if (finger < 4 && current.string > latestFinger.string && current.fret == latestFinger.fret)
 				continue;
 			toreturn.add(current);
 		}
@@ -323,7 +344,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		highestCapoedFrets = instrument.fretNutPositions.clone();
 		for (Capo capo : capos) {
 			int fret = capo.getFret();
-			for (int s = capo.getLowestString(); s<=capo.getHighestString(); ++s)
+			for (int s = capo.getLowestString(); s <= capo.getHighestString(); ++s)
 				highestCapoedFrets[s] = Math.max(fret, highestCapoedFrets[s]);
 		}
 	}
