@@ -147,7 +147,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 				for (int i = 0; i<chord.notes.length; ++i) {
 					Note n = chord.notes[i];
 					if (note(s, f)%12 == n.halfSteps%12)
-						inChord[s][f] = new IntervalicNote(chord.intervals[i], new Note(n.noteName, n.modifier, (instrument.tuning[s]+f-n.modifier)/12));
+						inChord[s][f] = new IntervalicNote(chord.intervals[i], new Note(n.noteName, n.modifier, (instrument.tuning[s].halfSteps+f-n.modifier)/12));
 				}
 			}
 		}
@@ -157,7 +157,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 	 * The int-value of the note at a position on the fretboard
 	 */
 	private int note(int string, int fret) {
-		return fret + instrument.tuning[string];
+		return fret + instrument.tuning[string].halfSteps;
 	}
 
 	private void calculateChords() {

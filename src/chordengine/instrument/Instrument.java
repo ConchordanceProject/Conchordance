@@ -1,5 +1,7 @@
 package chordengine.instrument;
 
+import chordengine.music.Note;
+
 /**
  * Models the string configuration of a fretted instrument.
  *
@@ -9,18 +11,25 @@ public class Instrument {
 	/**
 	 * Guitar in standard tuning.
 	 */
-	public static final Instrument GUITAR = new Instrument("Guitar", new int[] {7+5*12, 2+5*12, 10+4*12, 5+4*12, 0+4*12, 7+3*12}, new int[6], 14); 
+	public static final Instrument GUITAR = new Instrument("Guitar", 14,
+			new Note[] {new Note('E', 0, 5), new Note('B', 0, 5), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 4), new Note('E', 0, 3)}); 
 	
 	/**
 	 * Default set of instruments available.
 	 */
 	public static final Instrument[] DEFAULT_INSTRUMENTS = {
 		GUITAR,
-		new Instrument("Guitar - DADGAD", new int[] {5+5*12, 0+5*12, 10+4*12, 5+4*12, 0+4*12, 5+3*12}, new int[6], 14),
-		new Instrument("Guitar - Drop D", new int[] {7+5*12, 2+5*12, 10+4*12, 5+4*12, 0+4*12, 5+3*12}, new int[6], 14),
-		new Instrument("Irish Bouzouki", new int[] {5+5*12, 0+5*12, 5+4*12, 10+3*12}, new int[4], 12),
-		new Instrument("Mandolin", new int[] {10+3*12, 5+4*12, 0+5*12, 7+5*12}, new int[4], 12),
-		new Instrument("5-String Banjo", new int[] {5+4*12, 2+4*12, 10+3*12, 3+3*12, 5+4*12}, new int[] {0, 0, 0, 0, 5}, 12),
+		new Instrument("Guitar - DADGAD", 14,
+				new Note[] {new Note('D', 0, 5), new Note('A', 0, 5), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 4), new Note('D', 0, 3)}),
+		new Instrument("Guitar", 14,
+				new Note[] {new Note('E', 0, 5), new Note('B', 0, 5), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 4), new Note('D', 0, 3)}),
+		new Instrument("Irish Bouzouki", 12,
+				new Note[] {new Note('D', 0, 5), new Note('A', 0, 5), new Note('D', 0, 4), new Note('G', 0, 3)}),
+		new Instrument("Mandolin", 12,
+				new Note[] {new Note('E', 0, 5), new Note('A', 0, 5), new Note('D', 0, 4), new Note('G', 0, 3)}),
+		new Instrument("5-String Banjo", 12,
+				new Note[] {new Note('D', 0, 4), new Note('B', 0, 4), new Note('G', 0, 3), new Note('C', 0, 3), new Note('D', 0, 4)},
+				new int[] {0, 0, 0, 0, 5}),
 	};
 	
 	/**
@@ -32,7 +41,7 @@ public class Instrument {
 	 * The tuning of the instrument, from lowest-numbered string to highest-numbered string.
 	 * The tuning is considered to be the note conceptually at the 0th fret. If a string is tuned to a G at the fifth fret (as in the five-string banjo) that string conceptually tunes to a D at the 0th fret.
 	 */
-	public final int[] tuning;
+	public final Note[] tuning;
 
 	/**
 	 * The number of frets up the neck where each string begins.
@@ -58,11 +67,15 @@ public class Instrument {
 		return name;
 	}
 
-	public Instrument(String name, int[] tuning, int[] fretNutPositions, int frets){
+	public Instrument(String name, int frets, Note[] tuning, int[] fretNutPositions) {
 		this.name = name;
 		this.tuning = tuning;
 		this.fretNutPositions = fretNutPositions;
 		this.frets = frets;
 		strings = tuning.length;
+	}
+
+	public Instrument(String name, int frets, Note... tuning) {
+		this(name, frets, tuning, new int[tuning.length]);
 	}
 }
