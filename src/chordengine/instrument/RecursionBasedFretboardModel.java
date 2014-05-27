@@ -85,10 +85,10 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		maxFret = i.frets;
 		minFret = 1;
 
-		// Temporarily clear out any notes on the fretboard, so that dependants can receive instrument change before chords are caluclated.
-		inChord = new IntervalicNote[instrument.strings][instrument.frets+1];
-		
+		// Notify the layout change before generating new chords
 		updateInChord();
+		notifyFretboardChanged();
+		
 		calculateChords();
 	}
 
@@ -125,16 +125,18 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 	public boolean isAtFretNut(int string, int fret) {
 		return fret == instrument.fretNutPositions[string];
 	}
-
+	
 	public RecursionBasedFretboardModel(Chord chord) {
 		super();
+		this.chord = chord;
+
 		chords = new ChordListModel();
 		instrument = Instrument.GUITAR;
-		this.chord = chord;
 		primaryValidator = new BaseValidator();
 		minFret = 1;
 		maxFret = instrument.frets;
 		capos = new LinkedList<Capo>();
+		
 		evaluateCapos();
 		updateInChord();
 		calculateChords();

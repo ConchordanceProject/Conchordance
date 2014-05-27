@@ -21,7 +21,7 @@ public class Instrument {
 		GUITAR,
 		new Instrument("Guitar - DADGAD", 14,
 				new Note[] {new Note('D', 0, 5), new Note('A', 0, 5), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 4), new Note('D', 0, 3)}),
-		new Instrument("Guitar", 14,
+		new Instrument("Guitar - Drop D", 14,
 				new Note[] {new Note('E', 0, 5), new Note('B', 0, 5), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 4), new Note('D', 0, 3)}),
 		new Instrument("Irish Bouzouki", 12,
 				new Note[] {new Note('D', 0, 5), new Note('A', 0, 5), new Note('D', 0, 4), new Note('G', 0, 3)}),

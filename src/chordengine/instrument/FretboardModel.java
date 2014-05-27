@@ -1,6 +1,7 @@
 package chordengine.instrument;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import chordengine.fingers.list.ChordListModel;
@@ -68,7 +69,7 @@ public abstract class FretboardModel {
 	public abstract void setMaxFret(int f);
 
 	/**
-	 * Gets the maximum fet that can be used when building chords.
+	 * Gets the maximum fret that can be used when building chords.
 	 */
 	public abstract int getMaxFret();
 
@@ -121,7 +122,19 @@ public abstract class FretboardModel {
 		}
 		return bitPatterns;
 	}
+	
+	public void addFretboardListener(FretboardListener listener) {
+		listeners.add(listener);
+	}
 
 	public FretboardModel() {
+		listeners = new LinkedList<>();
 	}
+	
+	protected void notifyFretboardChanged() {
+		for (FretboardListener l : listeners)
+			l.fretboardChanged();
+	}
+	
+	private LinkedList<FretboardListener> listeners;
 }
