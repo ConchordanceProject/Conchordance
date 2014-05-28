@@ -29,9 +29,7 @@ public class Scale {
 		MAJOR_SCALES.put(new Note('C', -1), new Scale('C', new int[]{-1,-1,-1,-1,-1,-1,-1}));
 	}
 	
-	public static Scale getMajorScale(Note root) throws MusicException {
-		if (!MAJOR_SCALES.containsKey(root))
-			throw new MusicException("Cannot get a major scale for " + root);
+	public static Scale getMajorScale(Note root) {
 		return MAJOR_SCALES.get(root);
 	}
 	

@@ -1,7 +1,5 @@
 package chordengine.music;
 
-import chordengine.music.Interval;
-import chordengine.music.Note;
 
 /**
  * Model of a musical chord as an ordered sequence of notes.
@@ -28,13 +26,20 @@ public class Chord {
 		return root.toString();
 	}
 	
+	public Chord(Note root, ChordQuality quality) {
+		this.root = root;
+		this.intervals = quality.intervals;
+		Scale scale = Scale.getMajorScale(root);
+		this.notes = scale.applyIntervals(intervals);
+	}
+	
 	/**
 	 * Constructor.
 	 * Initializes the chord with its root and notes.
 	 * @param root the root of the chord
 	 * @param notes the notes in the chord
 	 */
-	public Chord (Note root, Note[] notes, Interval[] intervals) {
+	public Chord(Note root, Note[] notes, Interval[] intervals) {
 		this.root = root;
 		this.notes = notes;
 		this.intervals = intervals;

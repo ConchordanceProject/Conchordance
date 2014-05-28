@@ -10,6 +10,8 @@ import java.util.HashMap;
  */
 public class ChordQuality {
 	
+	public static final ChordQuality MAJOR = new ChordQuality("M", new Interval[]{Interval.UNISON, Interval.MAJOR_THIRD, Interval.PERFECT_FIFTH});
+	
 	/**
 	 * Instances of ChordQuality. Represents a list of chord qualities, usable for chord creation.
 	 */
@@ -17,7 +19,7 @@ public class ChordQuality {
 	static {
 		instances = new HashMap<String, ChordQuality>();
 
-		instances.put("M", new ChordQuality("M", new Interval[]{Interval.UNISON, Interval.MAJOR_THIRD, Interval.PERFECT_FIFTH}));
+		instances.put("M", MAJOR);
 		instances.put("m", new ChordQuality("m", new Interval[]{Interval.UNISON, Interval.MINOR_THIRD, Interval.PERFECT_FIFTH}));
 		instances.put("7", new ChordQuality("7", new Interval[]{Interval.UNISON, Interval.MAJOR_THIRD, Interval.PERFECT_FIFTH, Interval.MINOR_SEVENTH}));
 		instances.put("M7", new ChordQuality("M7", new Interval[]{Interval.UNISON, Interval.MAJOR_THIRD, Interval.PERFECT_FIFTH, Interval.MAJOR_SEVENTH}));
@@ -25,14 +27,7 @@ public class ChordQuality {
 		instances.put("m-M7", new ChordQuality("m-M7", new Interval[]{Interval.UNISON, Interval.MINOR_THIRD, Interval.PERFECT_FIFTH, Interval.MAJOR_SEVENTH}));
 		instances.put("dim7", new ChordQuality("dim7", new Interval[]{Interval.UNISON, Interval.MINOR_THIRD, Interval.DIMINISHED_FIFTH, new Interval(6, -2)}));
 	}
-	
-	public static ChordQuality forName(String name) throws MusicException {
-		if (instances.containsKey(name))
-			return instances.get(name);
-		else
-			throw new MusicException("Could not find chord type for \""+name+"\"");
-	}
-	
+
 	/**
 	 * The name of the chord quality (i.e. maj, min, etc)
 	 */
