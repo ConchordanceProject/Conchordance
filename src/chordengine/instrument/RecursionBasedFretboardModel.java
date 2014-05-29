@@ -208,7 +208,8 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		// For each legal position, assign finger one to that note and derive new chords from that shape.
 		for (StringFret fingerPos : fingerOptions) {
 			int finger = 1;
-			ChordFingering fingering = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, null);
+			IntervalicNote note = getNoteAt(fingerPos.string, fingerPos.fret);
+			ChordFingering fingering = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, note);
 			ArrayList<StringFret> nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
 			ArrayList<ChordFingering> fingerOneChords = new ArrayList<ChordFingering>();
 			rCalcFingerings(fingering, finger+1, nextFingerOptions, fingerOneChords);
