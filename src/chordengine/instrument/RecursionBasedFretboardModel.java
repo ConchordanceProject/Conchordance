@@ -208,17 +208,10 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		// For each legal position, assign finger one to that note and derive new chords from that shape.
 		for (StringFret fingerPos : fingerOptions) {
 			int finger = 1;
-			int[] fingers = new int[instrument.strings];
-			fingers[fingerPos.string] = finger;
-			IntervalicNote[] notes = new IntervalicNote[instrument.strings];
-			notes[fingerPos.string] = inChord[fingerPos.string][fingerPos.fret];
-			int[] absoluteFrets = base.absoluteFrets.clone();
-			absoluteFrets[fingerPos.string] = fingerPos.fret;
-			int[] capoRelativeFrets = base.capoRelativeFrets.clone();
-			capoRelativeFrets[fingerPos.string] = fingerPos.fret;
+			ChordFingering fingering = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, null);
 			ArrayList<StringFret> nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
 			ArrayList<ChordFingering> fingerOneChords = new ArrayList<ChordFingering>();
-			rCalcFingerings(new ChordFingering(chord, absoluteFrets, capoRelativeFrets, fingers, notes, false), finger+1, nextFingerOptions, fingerOneChords);
+			rCalcFingerings(fingering, finger+1, nextFingerOptions, fingerOneChords);
 			chordFingerings.addAll(fingerOneChords);
 			
 			// Try to create barred chords
@@ -250,16 +243,11 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 			}
 		
 			for (finger = 2; finger<5; ++finger) {
-				fingers = new int[instrument.strings];
-				fingers[fingerPos.string] = finger;
-				notes = new IntervalicNote[instrument.strings];
-				notes[fingerPos.string] = inChord[fingerPos.string][fingerPos.fret];
-				absoluteFrets = base.absoluteFrets.clone();
-				absoluteFrets[fingerPos.string] = fingerPos.fret;
-				capoRelativeFrets = base.capoRelativeFrets.clone();
-				capoRelativeFrets[fingerPos.string] = fingerPos.fret;
+				IntervalicNote newNote = getNoteAt(fingerPos.string, fingerPos.fret);
+				ChordFingering newChord = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, newNote);
+				
 				nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
-				rCalcFingerings(new ChordFingering(chord, absoluteFrets, capoRelativeFrets, fingers, notes, false), finger+1, nextFingerOptions, chordFingerings);
+				rCalcFingerings(newChord, finger+1, nextFingerOptions, chordFingerings);
 			}
 		}
 
@@ -325,7 +313,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 				for (int finger = firstAvailableFinger; finger<5; ++finger) {
 					IntervalicNote newNote = getNoteAt(newPlacement.string, newPlacement.fret);
 					ChordFingering newChord = current.clone(newPlacement.string, newPlacement.fret, newPlacement.fret, finger, newNote);
-
+					
 					rCalcFingerings(newChord, finger+1, removeIllegal(options, newPlacement, finger), chordFingerings);
 				}
 			}
