@@ -37,25 +37,23 @@ public interface ChordFingeringComparator extends Comparator<ChordFingering> {
 		}
 
 		public int compare(ChordFingering a, ChordFingering b) {
-			IntervalicNote[] aNotes = a.sortedNotes;
-			IntervalicNote[] bNotes = b.sortedNotes;
 			
-			int i = 0;
-			int j = 0;
+			int i = a.sortedNotes.length-1;
+			int j = b.sortedNotes.length-1;
 
 			while(true) {
-				if (i == aNotes.length && j == bNotes.length)
+				if (i == 0 && j == 0)
 					return 0;
-				if (i == aNotes.length)
+				if (i == 0)
 					return -1;
-				if (j == bNotes.length)
+				if (j == 0)
 					return 1;
-				int comp = new Integer(aNotes[i].note.halfSteps).compareTo(bNotes[j].note.halfSteps);
+				int comp = new Integer(a.sortedNotes[i].note.halfSteps).compareTo(b.sortedNotes[j].note.halfSteps);
 				if (comp != 0)
 					return comp;
 				
-				++i;
-				++j;
+				--i;
+				--j;
 			}
 		}
 	}
