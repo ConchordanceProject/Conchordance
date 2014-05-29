@@ -105,11 +105,11 @@ public abstract class FretboardModel {
 	 * @param numStrings the number of strings the instrument has
 	 * @param validStrings the strings that can be played open
 	 */
-	public boolean[][] openStringCombinations(int numStrings, ArrayList<Integer> validStrings) {
+	public boolean[][] openStringCombinations(ArrayList<Integer> validStrings) {
 		// combinations = 2^(possible open strings)-1
 		int combos = (int)Math.pow(2, validStrings.size())-1; // no combination corresponding to zero strings (all zeroes in binary)
 
-		boolean[][] bitPatterns = new boolean[combos][numStrings];
+		boolean[][] bitPatterns = new boolean[combos][getInstrument().strings];
 
 		for (int i = 0; i<combos; ++i) {
 			boolean[] asBinary = bitPatterns[i];

@@ -102,6 +102,21 @@ public class ChordFingering implements Cloneable {
 		return new ChordFingering(fingersCopy, absoluteFretsCopy, capoRelativeFretsCopy, notesCopy, sortedNotesCopy, inversion, isBarred, minFret, maxFret, maxFinger, numNotes, numFingers, numStrings);
 	}
 	
+	public ChordFingering clone(int string, int absoluteFret, int capoRelativeFret, int finger, IntervalicNote note) {
+		int[] fingersCopy = Arrays.copyOf(fingers, fingers.length);
+		int[] absoluteFretsCopy = Arrays.copyOf(absoluteFrets, absoluteFrets.length);
+		int[] capoRelativeFretsCopy = Arrays.copyOf(absoluteFrets, absoluteFrets.length);
+		IntervalicNote[] notesCopy = Arrays.copyOf(notes, notes.length);
+		
+		// Place the new finger
+		fingersCopy[string] = finger;
+		absoluteFretsCopy[string] = absoluteFret;
+		capoRelativeFretsCopy[string] = capoRelativeFret;
+		notesCopy[string] = note;
+		
+		return new ChordFingering(chord, absoluteFretsCopy, capoRelativeFretsCopy, fingersCopy, notesCopy, isBarred);
+	}
+	
 	/**
 	 * A String uniquely representing the shape of this chord on the fretboard.
 	 * Does not represent which fingers are used to form the shape, so different ways to finger the same shape will produce equal-value strings.
@@ -140,7 +155,7 @@ public class ChordFingering implements Cloneable {
 		int tempMaxFret = -1;
 		int tempMaxFinger = 0;
 		int tempNumFingers = 0;
-		for(int s = 0; s<numStrings; ++s) {
+		for (int s = 0; s < numStrings; ++s) {
 			tempMaxFinger = Math.max(tempMaxFinger, fingers[s]);
 			if (notes[s] != null)
 				++tempNumNotes;
@@ -174,22 +189,7 @@ public class ChordFingering implements Cloneable {
 		}
 		inversion = tempInversion;
 	}
-	
-	/**
-	 * Private constructor.
-	 * Used internally for cloning, to copy easily and avoid any expensive calculation.
-	 * @param fingers
-	 * @param absoluteFrets
-	 * @param capoRelativeFrets
-	 * @param notes
-	 * @param sortedNotes
-	 * @param minFret
-	 * @param maxFret
-	 * @param maxFinger
-	 * @param numNotes
-	 * @param numFingers
-	 * @param numStrings
-	 */
+
 	private ChordFingering(int[] fingers, int[] absoluteFrets, int[] capoRelativeFrets, IntervalicNote[] notes, IntervalicNote[] sortedNotes, int inversion, boolean isBarred, int minFret, int maxFret, int maxFinger, int numNotes, int numFingers, int numStrings) {
 		this.fingers = fingers;
 		this.absoluteFrets = absoluteFrets;
