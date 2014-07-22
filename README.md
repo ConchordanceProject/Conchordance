@@ -1,4 +1,4 @@
-ChordEngine
+Conchordance
 ===========
 
 This is a library for programmatically generating chords for guitar and similar instruments.
