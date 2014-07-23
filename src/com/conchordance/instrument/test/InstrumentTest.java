@@ -13,7 +13,7 @@ import com.conchordance.instrument.FretboardModel;
 import com.conchordance.instrument.Instrument;
 import com.conchordance.instrument.RecursionBasedFretboardModel;
 import com.conchordance.music.Chord;
-import com.conchordance.music.ChordQuality;
+import com.conchordance.music.ChordType;
 import com.conchordance.music.Note;
 
 
@@ -42,19 +42,19 @@ public class InstrumentTest {
 		FretboardModel fretboard = new RecursionBasedFretboardModel(Chord.A_MAJOR);
 
 		// Movable A chords
-		testFingering("A-form A major", new int[] {0, 2, 2, 2, 0, -1}, new Chord(new Note('A', 0), ChordQuality.MAJOR), fretboard);
-		testFingering("A-form B major", new int[] {2, 4, 4, 4, 2, -1}, new Chord(new Note('B', 0), ChordQuality.MAJOR), fretboard);
+		testFingering("A-form A major", new int[] {0, 2, 2, 2, 0, -1}, new Chord(new Note('A', 0), ChordType.MAJOR), fretboard);
+		testFingering("A-form B major", new int[] {2, 4, 4, 4, 2, -1}, new Chord(new Note('B', 0), ChordType.MAJOR), fretboard);
 		
 		// Movable E chords
-		testFingering("E-form E major", new int[] {0, 0, 1, 2, 2, 0}, new Chord(new Note('E', 0), ChordQuality.MAJOR), fretboard);
-		testFingering("E-form E major / octave", new int[] {12, 12, 13, 14, 14, 12}, new Chord(new Note('E', 0), ChordQuality.MAJOR), fretboard);
-		testFingering("F-form E major", new int[] {1, 1, 2, 3, 3, 1}, new Chord(new Note('F', 0), ChordQuality.MAJOR), fretboard);
-		testFingering("G-form E major", new int[] {3, 3, 4, 5, 5, 3}, new Chord(new Note('G', 0), ChordQuality.MAJOR), fretboard);
+		testFingering("E-form E major", new int[] {0, 0, 1, 2, 2, 0}, new Chord(new Note('E', 0), ChordType.MAJOR), fretboard);
+		testFingering("E-form E major / octave", new int[] {12, 12, 13, 14, 14, 12}, new Chord(new Note('E', 0), ChordType.MAJOR), fretboard);
+		testFingering("F-form E major", new int[] {1, 1, 2, 3, 3, 1}, new Chord(new Note('F', 0), ChordType.MAJOR), fretboard);
+		testFingering("G-form E major", new int[] {3, 3, 4, 5, 5, 3}, new Chord(new Note('G', 0), ChordType.MAJOR), fretboard);
 		
 		// Open position
-		testFingering("Open C major", new int[] {0, 1, 0, 2, 3, -1}, new Chord(new Note('C', 0), ChordQuality.MAJOR), fretboard);
-		testFingering("Open D major", new int[] {2, 3, 2, 0, -1, -1}, new Chord(new Note('D', 0), ChordQuality.MAJOR), fretboard);
-		testFingering("Open G major", new int[] {3, 0, 0, 0, 2, 3}, new Chord(new Note('G', 0), ChordQuality.MAJOR), fretboard);
+		testFingering("Open C major", new int[] {0, 1, 0, 2, 3, -1}, new Chord(new Note('C', 0), ChordType.MAJOR), fretboard);
+		testFingering("Open D major", new int[] {2, 3, 2, 0, -1, -1}, new Chord(new Note('D', 0), ChordType.MAJOR), fretboard);
+		testFingering("Open G major", new int[] {3, 0, 0, 0, 2, 3}, new Chord(new Note('G', 0), ChordType.MAJOR), fretboard);
 	}
 	
 	private void testFingering(String name, int[] frets, Chord chord, FretboardModel model) {

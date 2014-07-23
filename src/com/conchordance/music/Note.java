@@ -43,6 +43,25 @@ public class Note implements Comparable<Note> {
 		new Note('A', -1),
 	};
 	
+	public static Note parse(String string) {
+		char noteName = string.charAt(0);
+		int modifier = 0;
+		if (string.length() > 1) {
+			if (string.charAt(1) == '#') {
+				modifier = 1;
+			} else if (string.charAt(1) == 'x') {
+				modifier = 2;
+			} else if (string.charAt(1) == 'b') {
+				if (string.length() == 3 && string.charAt(2) == 'b')
+					modifier = -2;
+				else
+					modifier = -1;
+			}
+		}
+		
+		return new Note(noteName, modifier, 0);
+	}
+	
 	/**
 	 * The note name, only the letter, which determines the position on the staff
 	 */

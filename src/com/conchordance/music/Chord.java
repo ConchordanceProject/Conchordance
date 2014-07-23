@@ -26,9 +26,9 @@ public class Chord {
 		return root.toString();
 	}
 	
-	public Chord(Note root, ChordQuality quality) {
+	public Chord(Note root, ChordType type) {
 		this.root = root;
-		this.intervals = quality.intervals;
+		this.intervals = type.intervals;
 		Scale scale = Scale.getMajorScale(root);
 		this.notes = scale.applyIntervals(intervals);
 	}
