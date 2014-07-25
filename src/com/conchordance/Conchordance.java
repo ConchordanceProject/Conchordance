@@ -12,6 +12,12 @@ import com.conchordance.music.Note;
 
 public class Conchordance {
 	
+	public Chord getChord(String rootName, String chordTypeName) {
+		Note root = Note.parse(rootName);
+		ChordType type = chordTypeBank.getChordType(chordTypeName);
+		return new Chord(root, type);
+	}
+	
 	public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName) {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
 		model.setInstrument(instrument);

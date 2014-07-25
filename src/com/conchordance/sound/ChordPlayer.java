@@ -21,6 +21,9 @@ public class ChordPlayer {
 	private static final int ACCOUSTIC_GUITAR_INSTRUMENT = 25;
 	
 	public void strumChord(ChordFingering chord) {
+		if (sequencer == null)
+			return;
+		
 		try {
 			Sequence sequence = new Sequence(Sequence.PPQ, 100);
 			Track track = sequence.createTrack();
