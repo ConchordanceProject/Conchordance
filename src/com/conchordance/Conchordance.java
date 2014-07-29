@@ -17,7 +17,7 @@ public class Conchordance {
 		ChordType type = chordTypeBank.getChordType(chordTypeName);
 		return new Chord(root, type);
 	}
-	
+
 	public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName) {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
 		model.setInstrument(instrument);
@@ -33,6 +33,19 @@ public class Conchordance {
 			chords[i] = model.getChordList().getElementAt(i);
 		
 		return chords;
+	}
+
+	public FretboardModel getFretboard(String instrumentName, String rootName, String chordTypeName) {
+		Instrument instrument = instrumentBank.getInstrument(instrumentName);
+		model.setInstrument(instrument);
+		
+		Note root = Note.parse(rootName);
+		ChordType type = chordTypeBank.getChordType(chordTypeName);
+		Chord chord = new Chord(root, type);
+		
+		model.setChord(chord);
+		
+		return model;
 	}
 	
 	public Conchordance() {
