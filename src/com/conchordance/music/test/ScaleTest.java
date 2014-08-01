@@ -33,6 +33,13 @@ public class ScaleTest {
 	}
 
 	@Test
+	public void testOctaves() {
+		Scale aScale = Scale.getMajorScale(new Note('A', 0));
+		Note c = aScale.getNote(3);
+		assertEquals("Octave rolls over at C", new Note('C', 1, 1), c);
+	}
+
+	@Test
 	public void testApplyInterval() {
 		Scale cScale = Scale.getMajorScale(new Note('C', 0));
 

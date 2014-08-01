@@ -51,11 +51,19 @@ public class Scale {
 	public Note applyInterval(Interval interval) {
 		return notes[interval.major].modify(interval.modifier);
 	}
+	
+	public Note getNote(int majorInterval) {
+		return notes[majorInterval - 1];
+	}
 
 	private Scale(char root, int[] modifiers) {
 		notes = new Note[modifiers.length];
+		int octave = 0;
 		for (int i = 0; i<notes.length; ++i) {
-			notes[i] = new Note((char) ((root+i-'A') % 7 + 'A'), modifiers[i], 0);
+			char name = (char) ((root+i-'A') % 7 + 'A');
+			if (i > 0 && name =='C')
+				++octave;
+			notes[i] = new Note(name, modifiers[i], octave);
 		}
 	}
 	

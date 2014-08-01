@@ -139,6 +139,11 @@ public class Note implements Comparable<Note> {
 		int tempNote = 12 * octave + noteNamesToHalfSteps[name - 'A'] + modifier;
 		if (tempNote < 0)
 			tempNote += 12;
+		
+		// Octaves start at C, so A-0 and B-0 are higher than C-0
+		if (noteName == 'A' || noteName == 'B')
+			tempNote += 12;
+		
 		halfSteps = tempNote;
 	}
 	

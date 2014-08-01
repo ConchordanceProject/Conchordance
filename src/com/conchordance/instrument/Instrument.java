@@ -12,7 +12,7 @@ public class Instrument {
 	 * Guitar in standard tuning.
 	 */
 	public static final Instrument GUITAR = new Instrument("Guitar", 14,
-			new Note[] {new Note('E', 0, 5), new Note('B', 0, 5), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 4), new Note('E', 0, 3)}); 
+			new Note[] {new Note('E', 0, 5), new Note('B', 0, 4), new Note('G', 0, 4), new Note('D', 0, 4), new Note('A', 0, 3), new Note('E', 0, 3)});
 	
 	/**
 	 * The name of the instrument
