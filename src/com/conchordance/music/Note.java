@@ -11,8 +11,6 @@ public class Note implements Comparable<Note> {
 	public static final String DOUBLE_SHARP = "x";
 	public static final String FLAT = "\u266D";
 	
-	private static final int[] noteNamesToHalfSteps = {0, 2, 3, 5, 7, 8, 10};
-
 	public static final Note[] SHARP_NOTES = new Note[] {
 		new Note('A', 0),
 		new Note('A', 1),
@@ -136,15 +134,32 @@ public class Note implements Comparable<Note> {
 		this.modifier = modifier;
 		this.octave = octave;
 		
-		int tempNote = 12 * octave + noteNamesToHalfSteps[name - 'A'] + modifier;
-		if (tempNote < 0)
-			tempNote += 12;
+		int noteNameSteps = 0;
+		switch(noteName) {
+		case 'C':
+			noteNameSteps = 0;
+			break;
+		case 'D':
+			noteNameSteps = 2;
+			break;
+		case 'E':
+			noteNameSteps = 4;
+			break;
+		case 'F':
+			noteNameSteps = 5;
+			break;
+		case 'G':
+			noteNameSteps = 7;
+			break;
+		case 'A':
+			noteNameSteps = 9;
+			break;
+		case 'B':
+			noteNameSteps = 11;
+			break;
+		}
 		
-		// Octaves start at C, so A-0 and B-0 are higher than C-0
-		if (noteName == 'A' || noteName == 'B')
-			tempNote += 12;
-		
-		halfSteps = tempNote;
+		halfSteps = 12*octave + noteNameSteps + modifier;
 	}
 	
 	public Note(char name, int modifier) {
