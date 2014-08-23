@@ -1,0 +1,22 @@
+# java
+bin
+*.class
+
+# gradle
+build
+target
+.gradle
+gradle
+
+# OS X
+.DS_Store
+
+# eclipse
+.classpath
+.project
+.settings
+
+# intellij
+.idea
+*.iml
+*.iws

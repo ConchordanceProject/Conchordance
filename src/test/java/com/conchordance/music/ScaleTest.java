@@ -1,4 +1,4 @@
-package com.conchordance.music.test;
+package com.conchordance.music;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,4 +1,4 @@
-package com.conchordance.instrument.test;
+package com.conchordance.instrument;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import com.conchordance.fingers.ChordFingering;
 import com.conchordance.fingers.list.ChordListModel;
-import com.conchordance.instrument.FretboardModel;
-import com.conchordance.instrument.Instrument;
-import com.conchordance.instrument.RecursionBasedFretboardModel;
 import com.conchordance.music.Chord;
 import com.conchordance.music.ChordType;
 import com.conchordance.music.Note;
