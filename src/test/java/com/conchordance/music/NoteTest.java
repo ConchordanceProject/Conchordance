@@ -1,10 +1,9 @@
-package com.conchordance.music.test;
+package com.conchordance.music;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-
-import com.conchordance.music.Note;
 
 
 public class NoteTest {
