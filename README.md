@@ -1,5 +1,7 @@
 # Conchordance
 
+[![Build Status](https://travis-ci.org/ConchordanceProject/Conchordance.svg?branch=master)](https://travis-ci.org/ConchordanceProject/Conchordance)
+
 This is a library for programmatically generating chords for guitar and similar instruments.
 
 The advantage of generating chord fingerings programmatically, rather than storing them in a database, is that any tuning or instrument can be accomodated. The ChordEngine can just as easily reason about a guitar as Ukelele or a Bouzouki, or an instrument that hasn't been invented yet!
