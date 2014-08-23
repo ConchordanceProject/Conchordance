@@ -14,6 +14,7 @@ You can find a desktop application driven by this engine [here](https://github.c
 2. Run the task for the IDE of your choice:
     * IntelliJ: `gradle idea`
     * Eclipse: `gradle eclipse`
+3. Import the (now-existing) project into your IDE.
 
 ## Gradle tasks
 * `gradle build` - builds the jar (to `./build/libs/conchordance-$version.jar`)
