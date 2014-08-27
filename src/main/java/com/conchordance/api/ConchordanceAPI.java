@@ -1,13 +1,13 @@
-package main.java.com.conchordance.api;
+package com.conchordance.api;
 
 import com.conchordance.Conchordance;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import main.java.com.conchordance.api.resources.ChordResource;
-import main.java.com.conchordance.api.resources.FretboardResource;
-import main.java.com.conchordance.api.resources.InstrumentResource;
+import com.conchordance.api.resources.ChordResource;
+import com.conchordance.api.resources.FretboardResource;
+import com.conchordance.api.resources.InstrumentResource;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 import javax.servlet.DispatcherType;

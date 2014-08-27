@@ -1,4 +1,4 @@
-package main.java.com.conchordance.api.resources;
+package com.conchordance.api.resources;
 
 import com.conchordance.instrument.Instrument;
 import com.conchordance.instrument.InstrumentBank;
