@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'application'
+apply plugin: 'fatjar'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -12,6 +14,29 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "eu.appsatori:gradle-fatjar-plugin:0.2"
+    }
+}
+
 dependencies {
+	compile "io.dropwizard:dropwizard-core:0.7.1"
     testCompile 'junit:junit:4.11'
+}
+
+mainClassName = 'com.conchordance.api.ConchordanceAPI'
+
+run {
+    args "server", "config.yml"
+}
+
+fatJar {
+	manifest {
+		attributes "Main-Class": mainClassName
+	}
 }
