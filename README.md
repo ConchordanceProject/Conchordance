@@ -22,3 +22,7 @@ You can find a desktop application driven by this engine [here](https://github.c
 * `gradle build` - builds the jar (to `./build/libs/conchordance-$version.jar`)
 * `gradle test` - run all unit tests (this will be done as part of `build` as well)
 * `gradle clean` - cleans out all build/compile artifacts
+* `gradle run` - run the server locally (on port 8080)
+
+## Sample Requests
+* Get AM chord fingerings - /chords/fingerings?instrument=Guitar&root=A&type=M
