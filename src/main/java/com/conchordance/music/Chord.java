@@ -7,7 +7,7 @@ package com.conchordance.music;
  */
 public class Chord {	
 	public static final Chord A_MAJOR = 
-			new Chord(new Note('A', 0, 0), ChordType.MAJOR);
+			new Chord(new Note(NoteName.A, 0, 0), ChordType.MAJOR);
 	
 	/**
 	 * The musical root of the chord.

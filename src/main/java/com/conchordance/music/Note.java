@@ -1,5 +1,6 @@
 package com.conchordance.music;
 
+import static com.conchordance.music.NoteName.*;
 
 /**
  * Models a musical note. Expresses the name of the note (C, D, etc), number of
@@ -12,33 +13,33 @@ public class Note implements Comparable<Note> {
 	public static final String FLAT = "\u266D";
 	
 	public static final Note[] SHARP_NOTES = new Note[] {
-		new Note('A', 0),
-		new Note('A', 1),
-		new Note('B', 0),
-		new Note('C', 0),
-		new Note('C', 1),
-		new Note('D', 0),
-		new Note('D', 1),
-		new Note('E', 0),
-		new Note('F', 0),
-		new Note('F', 1),
-		new Note('G', 0),
-		new Note('G', 1),
+		new Note(A, 0),
+		new Note(A, 1),
+		new Note(B, 0),
+		new Note(C, 0),
+		new Note(C, 1),
+		new Note(D, 0),
+		new Note(D, 1),
+		new Note(E, 0),
+		new Note(F, 0),
+		new Note(F, 1),
+		new Note(G, 0),
+		new Note(G, 1),
 	};
 
 	public static final Note[] FLAT_NOTES = new Note[] {
-		new Note('A', 0),
-		new Note('B', -1),
-		new Note('B', 0),
-		new Note('C', 0),
-		new Note('D', -1),
-		new Note('D', 0),
-		new Note('E', -1),
-		new Note('E', 0),
-		new Note('F', 0),
-		new Note('G', -1),
-		new Note('G', 0),
-		new Note('A', -1),
+		new Note(A, 0),
+		new Note(B, -1),
+		new Note(B, 0),
+		new Note(C, 0),
+		new Note(D, -1),
+		new Note(D, 0),
+		new Note(E, -1),
+		new Note(E, 0),
+		new Note(F, 0),
+		new Note(G, -1),
+		new Note(G, 0),
+		new Note(A, -1),
 	};
 	
 	public static Note parse(String string) {
@@ -57,13 +58,13 @@ public class Note implements Comparable<Note> {
 			}
 		}
 		
-		return new Note(noteName, modifier, 0);
+		return new Note(NoteName.fromChar(noteName), modifier, 0);
 	}
 	
 	/**
-	 * The note name, only the letter, which determines the position on the staff
+	 * The note name, which determines the position on the staff
 	 */
-	public final char noteName;
+	public final NoteName noteName;
 
 	/**
 	 * The modifier of the note, positive values for sharps
@@ -129,40 +130,15 @@ public class Note implements Comparable<Note> {
 		return new Note(noteName, this.modifier+modifier, octave);
 	}
 
-	public Note(char name, int modifier, int octave) {
+	public Note(NoteName name, int modifier, int octave) {
 		this.noteName = name;
 		this.modifier = modifier;
 		this.octave = octave;
-		
-		int noteNameSteps = 0;
-		switch(noteName) {
-		case 'C':
-			noteNameSteps = 0;
-			break;
-		case 'D':
-			noteNameSteps = 2;
-			break;
-		case 'E':
-			noteNameSteps = 4;
-			break;
-		case 'F':
-			noteNameSteps = 5;
-			break;
-		case 'G':
-			noteNameSteps = 7;
-			break;
-		case 'A':
-			noteNameSteps = 9;
-			break;
-		case 'B':
-			noteNameSteps = 11;
-			break;
-		}
-		
-		halfSteps = 12*octave + noteNameSteps + modifier;
+
+		halfSteps = 12*octave + name.halfStepsFromC + modifier;
 	}
 	
-	public Note(char name, int modifier) {
+	public Note(NoteName name, int modifier) {
 		this(name, modifier, 0);
 	}
 }
