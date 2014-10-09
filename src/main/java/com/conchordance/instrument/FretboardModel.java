@@ -103,7 +103,6 @@ public abstract class FretboardModel {
 	/**
 	 * Produce an array representing each possible combination of strings that could be played open.
 	 * Each combination is represented as a boolean array. Index the array by string number for whether that string is used as part of the combination.
-	 * @param numStrings the number of strings the instrument has
 	 * @param validStrings the strings that can be played open
 	 */
 	public boolean[][] openStringCombinations(ArrayList<Integer> validStrings) {
