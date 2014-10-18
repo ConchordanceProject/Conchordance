@@ -25,6 +25,16 @@ public class ChordResource {
             @QueryParam("root") String root) {
         return conchordance.getChord(root, chordType);
     }
+
+    @GET
+    @Path("/fingering")
+    public ChordFingering getChordFingering(
+            @QueryParam("instrument") String instrumentName,
+            @QueryParam("frets") String frets,
+            @QueryParam("type") String chordType,
+            @QueryParam("root") String root) {
+        return conchordance.getChordFingering(root, chordType, frets, instrumentName);
+    }
     
     @OPTIONS
     public void options() {
