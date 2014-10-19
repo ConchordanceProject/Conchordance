@@ -112,8 +112,11 @@ public abstract class FretboardModel {
             int relativeFret = relativeFrets[s];
             if (relativeFret != -1) {
                 int absoluteFret = relativeFret == 0 ? getInstrument().fretNutPositions[s] : relativeFret;
+                absoluteFrets[s] = absoluteFret;
                 IntervalicNote note = getNoteAt(s, absoluteFret);
                 notes[s] = note;
+            } else {
+                absoluteFrets[s] = -1;
             }
         }
 

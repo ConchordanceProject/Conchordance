@@ -18,13 +18,14 @@ public class Conchordance {
         Instrument instrument = instrumentBank.getInstrument(instrumentName);
         model.setInstrument(instrument);
 
+        String[] parsedFrets = frets.split("-");
         int[] fretPositions = new int[instrument.strings];
-        for (int i = 0; i<fretPositions.length; ++i) {
-            char fretChar = frets.charAt(i);
-            if (fretChar == 'x')
-                fretPositions[instrument.strings-i-1] = -1;
+        for (int s = 0; s<fretPositions.length; ++s) {
+            String fretStr = parsedFrets[instrument.strings-s-1];
+            if (fretStr.equals("x"))
+                fretPositions[s] = -1;
             else
-                fretPositions[instrument.strings-i-1] = fretChar - '0';
+                fretPositions[s] = Integer.parseInt(fretStr);
         }
 
         return model.getChordFingering(chord, fretPositions);
