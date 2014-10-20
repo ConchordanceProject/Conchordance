@@ -1,6 +1,7 @@
 package com.conchordance.music;
 
 import java.util.HashMap;
+import static com.conchordance.music.NoteName.*;
 
 public class Scale {
 	
@@ -8,25 +9,25 @@ public class Scale {
 
 	static {
 		MAJOR_SCALES = new HashMap<>();
-		MAJOR_SCALES.put(new Note('C', 0), new Scale('C', new int[]{0,0,0,0,0,0,0}));
-		MAJOR_SCALES.put(new Note('C', 1), new Scale('C', new int[]{1,1,1,1,1,1,1}));
-		MAJOR_SCALES.put(new Note('D', -1), new Scale('D', new int[]{-1,-1,0,-1,-1,-1,0}));
-		MAJOR_SCALES.put(new Note('D', 0), new Scale('D', new int[]{0,0,1,0,0,0,1}));
-		MAJOR_SCALES.put(new Note('D', 1), new Scale('D', new int[]{1,1,2,1,1,1,2}));
-		MAJOR_SCALES.put(new Note('E', -1), new Scale('E', new int[]{-1,0,0,-1,-1,0,0}));
-		MAJOR_SCALES.put(new Note('E', 0), new Scale('E', new int[]{0,1,1,0,0,1,1}));
-		MAJOR_SCALES.put(new Note('F', 0), new Scale('F', new int[]{0,0,0,-1,0,0,0}));
-		MAJOR_SCALES.put(new Note('F', 1), new Scale('F', new int[]{1,1,1,0,1,1,1}));
-		MAJOR_SCALES.put(new Note('G', -1), new Scale('G', new int[]{-1,-1,-1,-1,-1,-1,0}));
-		MAJOR_SCALES.put(new Note('G', 0), new Scale('G', new int[]{0,0,0,0,0,0,1}));
-		MAJOR_SCALES.put(new Note('G', +1), new Scale('G', new int[]{1,1,1,1,1,1,2}));
-		MAJOR_SCALES.put(new Note('A', -1), new Scale('A', new int[]{-1,-1,0,-1,-1,0,0}));
-		MAJOR_SCALES.put(new Note('A', 0), new Scale('A', new int[]{0,0,1,0,0,1,1}));
-		MAJOR_SCALES.put(new Note('A', 1), new Scale('A', new int[]{1,1,2,1,1,2,2}));
-		MAJOR_SCALES.put(new Note('B', -1), new Scale('B', new int[]{-1,0,0,-1,0,0,0}));
-		MAJOR_SCALES.put(new Note('B', 0), new Scale('B', new int[]{0,1,1,0,1,1,1}));
-		MAJOR_SCALES.put(new Note('B', 1), new Scale('B', new int[]{1,2,2,1,2,2,2}));
-		MAJOR_SCALES.put(new Note('C', -1), new Scale('C', new int[]{-1,-1,-1,-1,-1,-1,-1}));
+		MAJOR_SCALES.put(new Note(C, 0), new Scale(C, new int[]{0,0,0,0,0,0,0}));
+		MAJOR_SCALES.put(new Note(C, 1), new Scale(C, new int[]{1,1,1,1,1,1,1}));
+		MAJOR_SCALES.put(new Note(D, -1), new Scale(D, new int[]{-1,-1,0,-1,-1,-1,0}));
+		MAJOR_SCALES.put(new Note(D, 0), new Scale(D, new int[]{0,0,1,0,0,0,1}));
+		MAJOR_SCALES.put(new Note(D, 1), new Scale(D, new int[]{1,1,2,1,1,1,2}));
+		MAJOR_SCALES.put(new Note(E, -1), new Scale(E, new int[]{-1,0,0,-1,-1,0,0}));
+		MAJOR_SCALES.put(new Note(E, 0), new Scale(E, new int[]{0,1,1,0,0,1,1}));
+		MAJOR_SCALES.put(new Note(F, 0), new Scale(F, new int[]{0,0,0,-1,0,0,0}));
+		MAJOR_SCALES.put(new Note(F, 1), new Scale(F, new int[]{1,1,1,0,1,1,1}));
+		MAJOR_SCALES.put(new Note(G, -1), new Scale(G, new int[]{-1,-1,-1,-1,-1,-1,0}));
+		MAJOR_SCALES.put(new Note(G, 0), new Scale(G, new int[]{0,0,0,0,0,0,1}));
+		MAJOR_SCALES.put(new Note(G, +1), new Scale(G, new int[]{1,1,1,1,1,1,2}));
+		MAJOR_SCALES.put(new Note(A, -1), new Scale(A, new int[]{-1,-1,0,-1,-1,0,0}));
+		MAJOR_SCALES.put(new Note(A, 0), new Scale(A, new int[]{0,0,1,0,0,1,1}));
+		MAJOR_SCALES.put(new Note(A, 1), new Scale(A, new int[]{1,1,2,1,1,2,2}));
+		MAJOR_SCALES.put(new Note(B, -1), new Scale(B, new int[]{-1,0,0,-1,0,0,0}));
+		MAJOR_SCALES.put(new Note(B, 0), new Scale(B, new int[]{0,1,1,0,1,1,1}));
+		MAJOR_SCALES.put(new Note(B, 1), new Scale(B, new int[]{1,2,2,1,2,2,2}));
+		MAJOR_SCALES.put(new Note(C, -1), new Scale(C, new int[]{-1,-1,-1,-1,-1,-1,-1}));
 	}
 	
 	public static Scale getMajorScale(Note root) {
@@ -56,14 +57,14 @@ public class Scale {
 		return notes[majorInterval - 1];
 	}
 
-	private Scale(char root, int[] modifiers) {
+	private Scale(NoteName root, int[] modifiers) {
 		notes = new Note[modifiers.length];
 		int octave = 0;
 		for (int i = 0; i<notes.length; ++i) {
-			char name = (char) ((root+i-'A') % 7 + 'A');
-			if (i > 0 && name =='C')
+            NoteName note = root.offset(i);
+			if (i > 0 && note == NoteName.C)
 				++octave;
-			notes[i] = new Note(name, modifiers[i], octave);
+			notes[i] = new Note(note, modifiers[i], octave);
 		}
 	}
 	

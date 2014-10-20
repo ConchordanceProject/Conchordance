@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.conchordance.fingers.ChordFingering;
 import com.conchordance.fingers.list.ChordListModel;
 import com.conchordance.music.Chord;
 import com.conchordance.music.IntervalicNote;
@@ -100,10 +101,34 @@ public abstract class FretboardModel {
 	 */
 	public abstract void removeCapo(Capo capo);
 
+    /**
+     *
+     */
+    public ChordFingering getChordFingering(Chord chord, int[] relativeFrets) {
+        int[] absoluteFrets = new int[relativeFrets.length];
+        IntervalicNote[] notes = new IntervalicNote[relativeFrets.length];
+
+        for (int s = 0; s<relativeFrets.length; ++s) {
+            int relativeFret = relativeFrets[s];
+            if (relativeFret != -1) {
+                int absoluteFret = relativeFret == 0 ? getInstrument().fretNutPositions[s] : relativeFret;
+                absoluteFrets[s] = absoluteFret;
+                IntervalicNote note = getNoteAt(s, absoluteFret);
+                notes[s] = note;
+            } else {
+                absoluteFrets[s] = -1;
+            }
+        }
+
+        // No finger information is given, so this is blank
+        int[] fingers = new int[relativeFrets.length];
+
+        return new ChordFingering(chord, absoluteFrets, relativeFrets, fingers, notes, false);
+    }
+
 	/**
 	 * Produce an array representing each possible combination of strings that could be played open.
 	 * Each combination is represented as a boolean array. Index the array by string number for whether that string is used as part of the combination.
-	 * @param numStrings the number of strings the instrument has
 	 * @param validStrings the strings that can be played open
 	 */
 	public boolean[][] openStringCombinations(ArrayList<Integer> validStrings) {

@@ -11,6 +11,25 @@ import com.conchordance.music.ChordTypeBank;
 import com.conchordance.music.Note;
 
 public class Conchordance {
+
+    public ChordFingering getChordFingering(String rootName, String chordTypeName, String frets, String instrumentName) {
+        Chord chord = getChord(rootName, chordTypeName);
+
+        Instrument instrument = instrumentBank.getInstrument(instrumentName);
+        model.setInstrument(instrument);
+
+        String[] parsedFrets = frets.split("-");
+        int[] fretPositions = new int[instrument.strings];
+        for (int s = 0; s<fretPositions.length; ++s) {
+            String fretStr = parsedFrets[instrument.strings-s-1];
+            if (fretStr.equals("x"))
+                fretPositions[s] = -1;
+            else
+                fretPositions[s] = Integer.parseInt(fretStr);
+        }
+
+        return model.getChordFingering(chord, fretPositions);
+    }
 	
 	public Chord getChord(String rootName, String chordTypeName) {
 		Note root = Note.parse(rootName);
