@@ -27,9 +27,7 @@ public class InstrumentBank {
 				new Note[] {new Note(D, 0, 5), new Note(A, 0, 4), new Note(D, 0, 4), new Note(G, 0, 3)}));
 		DEFAULT_BANK.addInstrument(new Instrument("Mandolin", 12,
 				new Note[] {new Note(E, 0, 5), new Note(A, 0, 4), new Note(D, 0, 4), new Note(G, 0, 3)}));
-		DEFAULT_BANK.addInstrument(new Instrument("5-String Banjo", 12,
-				new Note[] {new Note(D, 0, 5), new Note(B, 0, 4), new Note(G, 0, 4), new Note(C, 0, 4), new Note(D, 0, 5)},
-				new int[] {0, 0, 0, 0, 5}));
+		DEFAULT_BANK.addInstrument(Instrument.BANJO);
 	}
 
 	public void addInstrument(Instrument i) {

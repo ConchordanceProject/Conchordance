@@ -92,7 +92,7 @@ public class Note implements Comparable<Note> {
 			name += DOUBLE_SHARP;
 		for (int i = 0; i > modifier; --i)
 			name += FLAT;
-		return name;
+		return name + octave;
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class Note implements Comparable<Note> {
 		this.modifier = modifier;
 		this.octave = octave;
 
-		halfSteps = 12*octave + name.halfStepsFromC + modifier;
+        halfSteps = 12*octave + name.halfStepsFromC + modifier;
 	}
 	
 	public Note(NoteName name, int modifier) {

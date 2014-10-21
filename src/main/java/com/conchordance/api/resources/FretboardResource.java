@@ -28,7 +28,7 @@ public class FretboardResource {
         for (int s = 0; s < model.getInstrument().strings; s++) {
             List<Boolean> fretArray = new LinkedList<>();
             for (int f = 0; f < model.getInstrument().frets; f++) {
-                fretArray.add(model.hasNoteAt(s, f));
+                fretArray.add(model.hasChordNoteAt(s, f));
             }
             stringArray.add(fretArray);
         }

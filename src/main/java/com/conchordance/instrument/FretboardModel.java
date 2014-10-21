@@ -9,7 +9,6 @@ import com.conchordance.fingers.list.ChordListModel;
 import com.conchordance.music.Chord;
 import com.conchordance.music.IntervalicNote;
 
-
 /**
  * Class to model the fretboard of an instrument. The Fretboard does the brunt of the work of generating chords.
  * Given a chord, it finds all the positions on the neck that are part of the chord, and generates ChordFingerings out of fingerable combinations of those positions.
@@ -29,20 +28,23 @@ public abstract class FretboardModel {
 	 * Determines whether a position on the neck is a note that is part of the chord.
 	 * This includes notes that are not accessible because of a capo, or are out of the fret range.
 	 */
-	public abstract boolean hasNoteAt(int string, int fret);
+	public abstract boolean hasChordNoteAt(int string, int fret);
 	
 	/**
 	 * Whether a finger can be placed on a position on the fretboard.
 	 * A position is out of range if it is outside of the range specified by the min/max frets, or if it is nut-side of a capo.
 	 */
 	public abstract boolean isInRange(int string, int fret);
-	
-	/**
-	 * Gets the chord note that is at a position on the neck.
-	 */
-	public abstract IntervalicNote getNoteAt(int string, int fret);
 
-	/**
+    /**
+     * Gets the chord note that is at a position on the neck.
+     *
+     * This is the note within the Fretboard's current chord, so is not defined for a string/fret that doesn't belong
+     * in the current chord
+     */
+    public abstract IntervalicNote getChordNoteAt(int string, int fret);
+
+    /**
 	 * Whether a position is directly covered by a capo.
 	 */
 	public abstract boolean isOnCapo(int string, int fret);
@@ -113,7 +115,7 @@ public abstract class FretboardModel {
             if (relativeFret != -1) {
                 int absoluteFret = relativeFret == 0 ? getInstrument().fretNutPositions[s] : relativeFret;
                 absoluteFrets[s] = absoluteFret;
-                IntervalicNote note = getNoteAt(s, absoluteFret);
+                IntervalicNote note = getChordNoteAt(s, absoluteFret);
                 notes[s] = note;
             } else {
                 absoluteFrets[s] = -1;

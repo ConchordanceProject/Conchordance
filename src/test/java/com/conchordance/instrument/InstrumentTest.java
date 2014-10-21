@@ -1,10 +1,12 @@
 package com.conchordance.instrument;
 
+import static com.conchordance.music.NoteName.E;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
+import com.conchordance.music.NoteName;
 import org.junit.Test;
 
 import com.conchordance.fingers.ChordFingering;
@@ -16,6 +18,43 @@ import static com.conchordance.music.NoteName.*;
 
 
 public class InstrumentTest {
+
+    /**
+     *
+     */
+    @Test
+    public void testChordNoteLayout() {
+        FretboardModel model = new RecursionBasedFretboardModel(Chord.A_MAJOR);
+
+        Chord gMajor = new Chord(new Note(NoteName.G, 0), ChordType.MAJOR);
+        Chord cMajor = new Chord(new Note(NoteName.C, 0), ChordType.MAJOR);
+
+        // guitar
+        model.setInstrument(Instrument.GUITAR);
+        assertEquals("Guitar 1st string open", new Note(NoteName.E, 0, 5), model.getChordNoteAt(0, 0).note);
+        assertEquals("Guitar 1st string octave", new Note(NoteName.E, 0, 6), model.getChordNoteAt(0, 12).note);
+        assertEquals("Guitar 5th string octave", new Note(NoteName.A, 0, 3), model.getChordNoteAt(4, 0).note);
+        assertEquals("Guitar 6th string open", new Note(NoteName.E, 0, 3), model.getChordNoteAt(5, 0).note);
+        assertEquals("Guitar 6th string octave", new Note(NoteName.E, 0, 4), model.getChordNoteAt(5, 12).note);
+
+        // C's on guitar (do the octaves roll over correctly?)
+        model.setChord(cMajor);
+        assertEquals("Guitar 5th 3rd fret", new Note(NoteName.C, 0, 4), model.getChordNoteAt(4, 3).note);
+
+        // 5-string banjo (irregular tuning pegs)
+        model.setInstrument(Instrument.BANJO);
+        model.setChord(Chord.A_MAJOR);
+        assertEquals("Banjo 5th string 7th fret", new Note(NoteName.A, 0, 5), model.getChordNoteAt(4, 7).note);
+
+        model.setChord(gMajor);
+        assertEquals("Banjo 5th string open (5th fret)", new Note(NoteName.G, 0, 5), model.getChordNoteAt(4, 5).note);
+
+        // guitar, half-capo
+
+        // guitar, multiple capos
+
+        // Banjo with capo
+    }
 
 	/**
 	 * Tests that obvious fully open chords are produced by the fretboard

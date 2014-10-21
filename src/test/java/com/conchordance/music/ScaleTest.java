@@ -11,10 +11,10 @@ public class ScaleTest {
 	@Test
 	public void testGetMajorScale() {
 		String cScaleString = Scale.getMajorScale(new Note(C, 0)).toString();
-		assertEquals("C Scale", "C, D, E, F, G, A, B", cScaleString);
+		assertEquals("C Scale", "C0, D0, E0, F0, G0, A0, B0", cScaleString);
 
 		String bScaleString = Scale.getMajorScale(new Note(B, 0)).toString();
-		String bScaleManual = MessageFormat.format("B, C{0}, D{0}, E, F{0}, G{0}, A{0}", Note.SHARP);
+		String bScaleManual = MessageFormat.format("B0, C{0}1, D{0}1, E1, F{0}1, G{0}1, A{0}1", Note.SHARP);
 		assertEquals("B Scale", bScaleManual, bScaleString);
 	}
 
