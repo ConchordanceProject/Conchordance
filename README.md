@@ -25,4 +25,7 @@ You can find a desktop application driven by this engine [here](https://github.c
 * `gradle run` - run the server locally (on port 8080)
 
 ## Sample Requests
-* Get AM chord fingerings - /chords/fingerings?instrument=Guitar&root=A&type=M
+* Get supported instruments - /instruments
+* Get AM mapped on a guitar - /fretboard?instrument=Guitar&root=A&type=M
+* Get AM definition - /chords?root=A&type=M
+* Get AM chord fingerings on guitar - /chords/fingerings?instrument=Guitar&root=A&type=M
