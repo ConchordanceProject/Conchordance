@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.conchordance.music.MusicException;
 import com.conchordance.music.Note;
 import static com.conchordance.music.NoteName.*;
 
@@ -35,7 +36,9 @@ public class InstrumentBank {
 		instruments.add(i);
 	}
 	
-	public Instrument getInstrument(String name) {
+	public Instrument getInstrument(String name) throws MusicException {
+        if (!instrumentNames.containsKey(name))
+            throw new MusicException("No instrument could be found called \"" + name + "\".");
 		return instrumentNames.get(name);
 	}
 	

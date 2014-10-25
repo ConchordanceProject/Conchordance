@@ -20,7 +20,10 @@ public class ChordTypeBank {
 		DEFAULT_BANK.addChordType(new ChordType("dim7", new Interval[]{Interval.UNISON, Interval.MINOR_THIRD, Interval.DIMINISHED_FIFTH, new Interval(6, -2)}));
 	}
 	
-	public ChordType getChordType(String name) {
+	public ChordType getChordType(String name) throws MusicException {
+        if (!chordTypeNames.containsKey(name))
+            throw new MusicException("No chord type could be found named \"" + name + "\".");
+
 		return chordTypeNames.get(name);
 	}
 	

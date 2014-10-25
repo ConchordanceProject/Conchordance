@@ -42,8 +42,15 @@ public class Note implements Comparable<Note> {
 		new Note(A, -1),
 	};
 	
-	public static Note parse(String string) {
+	public static Note parse(String string) throws MusicException {
+        if (string == null || string.isEmpty())
+            throw new MusicException("A valid note must be given.");
+
 		char noteName = string.charAt(0);
+
+        if (noteName < 'A' || noteName > 'G')
+            throw new MusicException("\"" + noteName + "\" is not a valid note name.");
+
 		int modifier = 0;
 		if (string.length() > 1) {
 			if (string.charAt(1) == '#') {

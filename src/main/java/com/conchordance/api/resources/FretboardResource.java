@@ -1,7 +1,9 @@
 package com.conchordance.api.resources;
 
 import com.conchordance.Conchordance;
+import com.conchordance.api.ExceptionResponse;
 import com.conchordance.instrument.FretboardModel;
+import com.conchordance.music.MusicException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -22,18 +24,22 @@ public class FretboardResource {
             @QueryParam("instrument") String instrument,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
-        FretboardModel model = conchordance.getFretboard(instrument, root, chordType);
-        List<List<Boolean>> stringArray = new LinkedList<>();
+        try {
+            FretboardModel model = conchordance.getFretboard(instrument, root, chordType);
+            List<List<Boolean>> stringArray = new LinkedList<>();
 
-        for (int s = 0; s < model.getInstrument().strings; s++) {
-            List<Boolean> fretArray = new LinkedList<>();
-            for (int f = 0; f < model.getInstrument().frets; f++) {
-                fretArray.add(model.hasChordNoteAt(s, f));
+            for (int s = 0; s < model.getInstrument().strings; s++) {
+                List<Boolean> fretArray = new LinkedList<>();
+                for (int f = 0; f < model.getInstrument().frets; f++) {
+                    fretArray.add(model.hasChordNoteAt(s, f));
+                }
+                stringArray.add(fretArray);
             }
-            stringArray.add(fretArray);
-        }
 
-        return stringArray;
+            return stringArray;
+        } catch (MusicException muse) {
+            throw new ExceptionResponse(400, muse.getMessage());
+        }
     }
     
     @OPTIONS
