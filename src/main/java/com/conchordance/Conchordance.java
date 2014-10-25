@@ -5,14 +5,11 @@ import com.conchordance.instrument.FretboardModel;
 import com.conchordance.instrument.Instrument;
 import com.conchordance.instrument.InstrumentBank;
 import com.conchordance.instrument.RecursionBasedFretboardModel;
-import com.conchordance.music.Chord;
-import com.conchordance.music.ChordType;
-import com.conchordance.music.ChordTypeBank;
-import com.conchordance.music.Note;
+import com.conchordance.music.*;
 
 public class Conchordance {
 
-    public ChordFingering getChordFingering(String rootName, String chordTypeName, String frets, String instrumentName) {
+    public ChordFingering getChordFingering(String rootName, String chordTypeName, String frets, String instrumentName) throws MusicException {
         Chord chord = getChord(rootName, chordTypeName);
 
         Instrument instrument = instrumentBank.getInstrument(instrumentName);
@@ -31,13 +28,13 @@ public class Conchordance {
         return model.getChordFingering(chord, fretPositions);
     }
 	
-	public Chord getChord(String rootName, String chordTypeName) {
+	public Chord getChord(String rootName, String chordTypeName) throws MusicException {
 		Note root = Note.parse(rootName);
 		ChordType type = chordTypeBank.getChordType(chordTypeName);
 		return new Chord(root, type);
 	}
 
-	public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName) {
+	public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName) throws MusicException {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
 		model.setInstrument(instrument);
 		
@@ -54,7 +51,7 @@ public class Conchordance {
 		return chords;
 	}
 
-	public FretboardModel getFretboard(String instrumentName, String rootName, String chordTypeName) {
+	public FretboardModel getFretboard(String instrumentName, String rootName, String chordTypeName) throws MusicException {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
 		model.setInstrument(instrument);
 		

@@ -1,10 +1,12 @@
 package com.conchordance.api.resources;
 
 import com.conchordance.Conchordance;
+import com.conchordance.api.ExceptionResponse;
 import com.conchordance.fingers.ChordFingering;
 import com.conchordance.music.Chord;
 import com.conchordance.music.ChordType;
 import com.conchordance.music.ChordTypeBank;
+import com.conchordance.music.MusicException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -23,7 +25,11 @@ public class ChordResource {
     public Chord getChord(
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
-        return conchordance.getChord(root, chordType);
+        try {
+            return conchordance.getChord(root, chordType);
+        } catch (MusicException muse) {
+            throw new ExceptionResponse(400, muse.getMessage());
+        }
     }
 
     @GET
@@ -33,7 +39,11 @@ public class ChordResource {
             @QueryParam("frets") String frets,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
-        return conchordance.getChordFingering(root, chordType, frets, instrumentName);
+        try {
+            return conchordance.getChordFingering(root, chordType, frets, instrumentName);
+        } catch (MusicException muse) {
+            throw new ExceptionResponse(400, muse.getMessage());
+        }
     }
     
     @OPTIONS
@@ -46,7 +56,11 @@ public class ChordResource {
             @QueryParam("instrument") String instrumentName,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
-        return conchordance.getChords(instrumentName, root, chordType);
+        try {
+            return conchordance.getChords(instrumentName, root, chordType);
+        } catch (MusicException muse) {
+            throw new ExceptionResponse(400, muse.getMessage());
+        }
     }
     
     @OPTIONS

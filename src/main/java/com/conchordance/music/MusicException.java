@@ -1,6 +1,6 @@
 package com.conchordance.music;
 
-public class MusicException extends Throwable {
+public class MusicException extends Exception {
 	public MusicException(String message) {
 		super(message);
 	}
