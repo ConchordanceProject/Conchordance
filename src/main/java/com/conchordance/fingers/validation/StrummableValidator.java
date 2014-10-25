@@ -12,8 +12,9 @@ public class StrummableValidator implements ChordFingeringValidator {
 		int lowestStringUsed = 0;
 		while (candidate.notes[lowestStringUsed] == null)
 			++lowestStringUsed;
-		
-		int highestStringUsed = candidate.numStrings-1;
+
+        int numStrings = candidate.absoluteFrets.length;
+		int highestStringUsed = numStrings-1;
 		while (candidate.notes[highestStringUsed] == null)
 			--highestStringUsed;
 			

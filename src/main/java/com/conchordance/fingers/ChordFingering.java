@@ -48,41 +48,30 @@ public class ChordFingering implements Cloneable {
 	 * The notes resulting from this fingering, sorted by increasing pitch.
 	 */
 	public final IntervalicNote[] sortedNotes;
-	
+
+    /**
+     * The musical inversion of the chord
+     * 0 indicates root position, 1 indicates first inversion, etc.
+     */
 	public final int inversion;
 	
 	public final boolean isBarred;
 	
 	/**
-	 * The lowest fret on which a finger is placed.
+	 * The lowest fret on which a finger is placed, or 0 if the chord is entirely open
 	 */
-	public final int minFret;
+	public final int position;
 	
 	/**
-	 * The highest fret on which a finger is placed.
+	 * The highest fret on which a finger is placed, or 0 if the chord is entirely open
 	 */
 	public final int maxFret;
-	
-	/**
-	 * The highest-numbered finger that is placed in this finger.
-	 */
-	public final int maxFinger;
-	
-	/**
-	 * The number of notes sounded in this fingering.
-	 */
-	public final int numNotes;
-	
+
 	/**
 	 * The number of fingers used in this fingering.
 	 */
-	public final int numFingers;
-	
-	/**
-	 * The number of strings of the instrument.
-	 */
-	public final int numStrings;
-	
+	public final int numFingersUsed;
+
 	public final Chord chord;
 	
 	/**
@@ -95,9 +84,13 @@ public class ChordFingering implements Cloneable {
 		int[] capoRelativeFretsCopy = Arrays.copyOf(absoluteFrets, absoluteFrets.length);
 		IntervalicNote[] notesCopy = Arrays.copyOf(notes, notes.length);
 		IntervalicNote[] sortedNotesCopy = Arrays.copyOf(sortedNotes, sortedNotes.length);
-		return new ChordFingering(fingersCopy, absoluteFretsCopy, capoRelativeFretsCopy, notesCopy, sortedNotesCopy, inversion, isBarred, minFret, maxFret, maxFinger, numNotes, numFingers, numStrings);
+		return new ChordFingering(fingersCopy, absoluteFretsCopy, capoRelativeFretsCopy, notesCopy, sortedNotesCopy, inversion, isBarred, position, maxFret, numFingersUsed);
 	}
-	
+
+    /**
+     * Clones this chord fingering with the addition of one new finger placement,
+     * adding a single note the the cloned chord
+     */
 	public ChordFingering clone(int string, int absoluteFret, int capoRelativeFret, int finger, IntervalicNote note) {
 		int[] fingersCopy = Arrays.copyOf(fingers, fingers.length);
 		int[] absoluteFretsCopy = Arrays.copyOf(absoluteFrets, absoluteFrets.length);
@@ -138,7 +131,6 @@ public class ChordFingering implements Cloneable {
 	 * @param notes the notes of the fingering, by string
 	 */
 	public ChordFingering(Chord chord, int[] absoluteFrets, int[] capoRelativeFrets, int[] fingers, IntervalicNote[] notes, boolean isBarred) {
-		this.numStrings = fingers.length;
 		this.fingers = fingers;
 		this.absoluteFrets = absoluteFrets;
 		this.capoRelativeFrets = capoRelativeFrets;
@@ -146,29 +138,34 @@ public class ChordFingering implements Cloneable {
 		this.isBarred = isBarred;
 		this.chord = chord;
 		
-		int tempNumNotes = 0;
-		int tempMinFret = Integer.MAX_VALUE;
+		int numNotes = 0;
+		int minimumFret = Integer.MAX_VALUE;
 		int tempMaxFret = -1;
-		int tempMaxFinger = 0;
 		int tempNumFingers = 0;
-		for (int s = 0; s < numStrings; ++s) {
-			tempMaxFinger = Math.max(tempMaxFinger, fingers[s]);
-			if (notes[s] != null)
-				++tempNumNotes;
-			if (capoRelativeFrets[s]>0){
+
+		for (int string = 0; string < absoluteFrets.length; ++string) {
+			if (notes[string] != null)
+				++numNotes;
+			if (capoRelativeFrets[string]>0){
 				++tempNumFingers;
-				tempMinFret = Math.min(tempMinFret, capoRelativeFrets[s]);
-				tempMaxFret = Math.max(tempMaxFret, capoRelativeFrets[s]);
+				minimumFret = Math.min(minimumFret, capoRelativeFrets[string]);
+				tempMaxFret = Math.max(tempMaxFret, capoRelativeFrets[string]);
 			}
 		}
-		minFret = tempMinFret;
-		maxFret = tempMaxFret;
-		maxFinger = tempMaxFinger;
-		numFingers = tempNumFingers;
-		numNotes = tempNumNotes;
 
-		//populate and sort sortedNotes
-		sortedNotes = new IntervalicNote[tempNumNotes];
+        numFingersUsed = tempNumFingers;
+
+        // If no fingers are used the chord is in the open position
+        if (numFingersUsed == 0) {
+            position = 0;
+            maxFret = 0;
+        } else {
+            position = minimumFret;
+            maxFret = tempMaxFret;
+        }
+
+		// Populate and sort sortedNotes
+		sortedNotes = new IntervalicNote[numNotes];
 		int i = 0;
 		for (IntervalicNote n : notes) {
 			if (n != null)
@@ -179,7 +176,7 @@ public class ChordFingering implements Cloneable {
 		// Find inversion
 		int tempInversion = -1;
 		if (numNotes > 0) {
-			for (int inv = 0; inv<chord.intervals.length; ++inv) {
+			for (int inv = 0; inv < chord.intervals.length; ++inv) {
 				if (sortedNotes[0].interval.strictlyEquals(chord.intervals[inv]))
 					tempInversion = inv;
 			}
@@ -187,7 +184,7 @@ public class ChordFingering implements Cloneable {
 		inversion = tempInversion;
 	}
 
-	private ChordFingering(int[] fingers, int[] absoluteFrets, int[] capoRelativeFrets, IntervalicNote[] notes, IntervalicNote[] sortedNotes, int inversion, boolean isBarred, int minFret, int maxFret, int maxFinger, int numNotes, int numFingers, int numStrings) {
+	private ChordFingering(int[] fingers, int[] absoluteFrets, int[] capoRelativeFrets, IntervalicNote[] notes, IntervalicNote[] sortedNotes, int inversion, boolean isBarred, int position, int maxFret, int numFingers) {
 		this.fingers = fingers;
 		this.absoluteFrets = absoluteFrets;
 		this.capoRelativeFrets = capoRelativeFrets;
@@ -195,12 +192,9 @@ public class ChordFingering implements Cloneable {
 		this.sortedNotes = sortedNotes;
 		this.inversion = inversion;
 		this.isBarred = isBarred;
-		this.minFret = minFret;
+		this.position = position;
 		this.maxFret = maxFret;
-		this.maxFinger = maxFinger;
-		this.numNotes = numNotes;
-		this.numFingers = numFingers;
-		this.numStrings = numStrings;
+		this.numFingersUsed = numFingers;
 		this.chord = null;
 	}
 }

@@ -36,10 +36,10 @@ public class ChordPlayer {
 			// A downward strum, starts at the highest-numbered string
 			int time = 0;
 			int duration = 100;
-			for (int s = chord.numStrings-1; s >=0; --s) {
+			for (int string = chord.absoluteFrets.length-1; string >=0; --string) {
 				// Play a note if this string is not muted
-				if (chord.notes[s] != null) {
-					Note n = chord.notes[s].note;
+				if (chord.notes[string] != null) {
+					Note n = chord.notes[string].note;
 					int pitch = n.halfSteps + A_0_MIDI_NUMBER;
 					MidiEvent onEvent = new MidiEvent(new ShortMessage(ShortMessage.NOTE_ON, STRUM_TRACK, pitch, 100), time);
 					track.add(onEvent);

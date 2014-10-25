@@ -277,7 +277,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 	 * can be narrowed down based on how the hand can stretch.
 	 */
 	private ArrayList<StringFret> removeIllegal(ArrayList<StringFret> options, StringFret latestFinger, int finger) {
-		ArrayList<StringFret> toreturn = new ArrayList<StringFret>();
+		ArrayList<StringFret> toreturn = new ArrayList<>();
 		for (StringFret current : options) {
 			if (current.fret < latestFinger.fret)
 				continue;

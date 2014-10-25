@@ -36,7 +36,7 @@ public class MultipleChoiceValidator implements ChordFingeringValidator{
 	public MultipleChoiceValidator(String groupName, Collection<ChordFingeringValidator> validators, ChordFingeringValidator activeValidator) {
 		this.activeValidator = activeValidator;
 		this.groupName = groupName;
-		this.validators = new ArrayList<ChordFingeringValidator>();
+		this.validators = new ArrayList<>();
 		this.validators.addAll(validators);
 	}
 	

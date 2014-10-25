@@ -43,8 +43,8 @@ public class DisjunctiveValidator implements ChordFingeringValidator {
 	
 	public DisjunctiveValidator(String groupName, Collection<ChordFingeringValidator> validators) {
 		this.groupName = groupName;
-		activeValidators = new HashSet<ChordFingeringValidator>();
-		this.validators = new ArrayList<ChordFingeringValidator>();
+		activeValidators = new HashSet<>();
+		this.validators = new ArrayList<>();
 		this.validators.addAll(validators);
 	}
 	

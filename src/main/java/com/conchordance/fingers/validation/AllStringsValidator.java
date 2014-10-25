@@ -10,6 +10,6 @@ public class AllStringsValidator implements ChordFingeringValidator {
 	}
 
 	public boolean validate(ChordFingering candidate, Chord compareTo) {
-		return candidate.numNotes == candidate.numStrings;
+		return candidate.sortedNotes.length == candidate.notes.length;
 	}
 }
