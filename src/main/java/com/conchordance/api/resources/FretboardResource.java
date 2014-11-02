@@ -21,7 +21,7 @@ public class FretboardResource {
 
     @GET
     public List<List<Boolean>> getFretboardModels(
-            @QueryParam("fretted") String instrument,
+            @QueryParam("instrument") String instrument,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
         try {

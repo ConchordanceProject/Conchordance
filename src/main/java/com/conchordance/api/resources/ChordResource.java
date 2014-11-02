@@ -35,7 +35,7 @@ public class ChordResource {
     @GET
     @Path("/fingering")
     public ChordFingering getChordFingering(
-            @QueryParam("fretted") String instrumentName,
+            @QueryParam("instrument") String instrumentName,
             @QueryParam("frets") String frets,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
@@ -53,7 +53,7 @@ public class ChordResource {
     @GET
     @Path("/fingerings")
     public ChordFingering[] getChordFingering(
-            @QueryParam("fretted") String instrumentName,
+            @QueryParam("instrument") String instrumentName,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
         try {
