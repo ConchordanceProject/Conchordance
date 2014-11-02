@@ -1,13 +1,12 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.list.ChordListModel;
-import com.conchordance.fingers.validation.BaseValidator;
-import com.conchordance.fingers.validation.ChordFingeringValidator;
+import com.conchordance.fretted.fingering.ChordFingering;
+import com.conchordance.fretted.fingering.validation.BaseValidator;
+import com.conchordance.fretted.fingering.validation.ChordFingeringValidator;
 import com.conchordance.music.Chord;
 import com.conchordance.music.Interval;
 import com.conchordance.music.IntervalicNote;

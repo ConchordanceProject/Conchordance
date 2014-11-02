@@ -1,4 +1,4 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import static com.conchordance.music.NoteName.E;
 import static org.junit.Assert.assertEquals;
@@ -10,8 +10,7 @@ import java.util.List;
 import com.conchordance.music.NoteName;
 import org.junit.Test;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.list.ChordListModel;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 import com.conchordance.music.ChordType;
 import com.conchordance.music.Note;

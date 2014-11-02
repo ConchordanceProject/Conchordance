@@ -2,7 +2,7 @@ package com.conchordance.api.resources;
 
 import com.conchordance.Conchordance;
 import com.conchordance.api.ExceptionResponse;
-import com.conchordance.fingers.ChordFingering;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 import com.conchordance.music.ChordType;
 import com.conchordance.music.ChordTypeBank;
@@ -35,7 +35,7 @@ public class ChordResource {
     @GET
     @Path("/fingering")
     public ChordFingering getChordFingering(
-            @QueryParam("instrument") String instrumentName,
+            @QueryParam("fretted") String instrumentName,
             @QueryParam("frets") String frets,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
@@ -53,7 +53,7 @@ public class ChordResource {
     @GET
     @Path("/fingerings")
     public ChordFingering[] getChordFingering(
-            @QueryParam("instrument") String instrumentName,
+            @QueryParam("fretted") String instrumentName,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
         try {

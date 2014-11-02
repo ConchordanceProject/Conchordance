@@ -1,8 +1,8 @@
-package com.conchordance.fingers.list;
+package com.conchordance.fretted.fingering.list;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.validation.ChordFingeringValidator;
-import com.conchordance.fingers.validation.TrivialValidator;
+import com.conchordance.fretted.fingering.ChordFingering;
+import com.conchordance.fretted.fingering.validation.ChordFingeringValidator;
+import com.conchordance.fretted.fingering.validation.TrivialValidator;
 import com.conchordance.music.Chord;
 
 import java.util.ArrayList;

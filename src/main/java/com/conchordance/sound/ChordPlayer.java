@@ -9,7 +9,7 @@ import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
-import com.conchordance.fingers.ChordFingering;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Note;
 
 

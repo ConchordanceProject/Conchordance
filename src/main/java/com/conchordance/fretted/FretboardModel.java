@@ -1,10 +1,10 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conchordance.fingers.ChordFingering;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 import com.conchordance.music.IntervalicNote;
 

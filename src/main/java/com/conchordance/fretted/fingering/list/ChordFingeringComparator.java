@@ -1,8 +1,8 @@
-package com.conchordance.fingers.list;
+package com.conchordance.fretted.fingering.list;
 
 import java.util.Comparator;
 
-import com.conchordance.fingers.ChordFingering;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.IntervalicNote;
 
 

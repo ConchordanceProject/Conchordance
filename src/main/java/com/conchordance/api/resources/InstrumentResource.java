@@ -1,7 +1,7 @@
 package com.conchordance.api.resources;
 
-import com.conchordance.instrument.Instrument;
-import com.conchordance.instrument.InstrumentBank;
+import com.conchordance.fretted.Instrument;
+import com.conchordance.fretted.InstrumentBank;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
