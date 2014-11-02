@@ -1,10 +1,10 @@
-package com.conchordance.fingers.validation;
+package com.conchordance.fretted.fingering.validation;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.conchordance.fingers.ChordFingering;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 
 

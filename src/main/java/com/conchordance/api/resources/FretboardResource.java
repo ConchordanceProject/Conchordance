@@ -2,7 +2,7 @@ package com.conchordance.api.resources;
 
 import com.conchordance.Conchordance;
 import com.conchordance.api.ExceptionResponse;
-import com.conchordance.instrument.FretboardModel;
+import com.conchordance.fretted.FretboardModel;
 import com.conchordance.music.MusicException;
 
 import javax.ws.rs.*;
@@ -21,7 +21,7 @@ public class FretboardResource {
 
     @GET
     public List<List<Boolean>> getFretboardModels(
-            @QueryParam("instrument") String instrument,
+            @QueryParam("fretted") String instrument,
             @QueryParam("type") String chordType,
             @QueryParam("root") String root) {
         try {

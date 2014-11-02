@@ -1,4 +1,4 @@
-package com.conchordance.fingers;
+package com.conchordance.fretted.fingering;
 
 import java.util.Arrays;
 

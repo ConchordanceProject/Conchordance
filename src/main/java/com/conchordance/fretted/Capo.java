@@ -1,4 +1,4 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 /**
  * Class to model a capo and its position on the neck of an instrument.

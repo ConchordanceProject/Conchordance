@@ -1,16 +1,16 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import static com.conchordance.music.NoteName.E;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.conchordance.music.NoteName;
 import org.junit.Test;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.list.ChordListModel;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 import com.conchordance.music.ChordType;
 import com.conchordance.music.Note;
@@ -65,8 +65,8 @@ public class InstrumentTest {
 		FretboardModel model = new RecursionBasedFretboardModel(Chord.A_MAJOR);
 		model.setInstrument(openA);
 		
-		ChordListModel list = model.getChordList();
-		assertEquals("Only one chord found", 1, list.getSize());
+		List<ChordFingering> chords = model.calculateChords();
+		assertEquals("Only one chord found", 1, chords.size());
 	}
 	
 	/**
@@ -98,9 +98,8 @@ public class InstrumentTest {
 		model.setChord(chord);
 		boolean found = false;
 		
-		ChordListModel chords = model.getChordList();
-		for (int i = 0; i<chords.getSize(); ++i) {
-			ChordFingering fingering = chords.getElementAt(i);
+		List<ChordFingering> chords = model.calculateChords();
+		for (ChordFingering fingering : chords) {
 			if (Arrays.equals(frets, fingering.absoluteFrets)) {
 				found = true;
 				break;

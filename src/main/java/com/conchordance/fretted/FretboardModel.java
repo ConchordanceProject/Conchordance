@@ -1,11 +1,10 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.list.ChordListModel;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 import com.conchordance.music.IntervalicNote;
 
@@ -16,8 +15,6 @@ import com.conchordance.music.IntervalicNote;
  *
  */
 public abstract class FretboardModel {
-	public abstract ChordListModel getChordList();
-
 	public abstract void setChord(Chord c);
 	
 	public abstract Instrument getInstrument();
@@ -102,6 +99,8 @@ public abstract class FretboardModel {
 	 * Remove a capo from the fretboard.
 	 */
 	public abstract void removeCapo(Capo capo);
+
+    public abstract List<ChordFingering> calculateChords();
 
     /**
      *

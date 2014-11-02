@@ -1,24 +1,26 @@
-package com.conchordance.fingers.list;
+package com.conchordance.fretted.fingering.list;
+
+import com.conchordance.fretted.fingering.ChordFingering;
+import com.conchordance.fretted.fingering.validation.ChordFingeringValidator;
+import com.conchordance.fretted.fingering.validation.TrivialValidator;
+import com.conchordance.music.Chord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-
-import javax.swing.AbstractListModel;
-
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.validation.ChordFingeringValidator;
-import com.conchordance.fingers.validation.TrivialValidator;
-import com.conchordance.music.Chord;
 
 
 /**
  * A list of ChordFingerings. Used as a central source for sorting and filtering ChordFingerings.
  *
  */
-public class ChordListModel extends AbstractListModel<ChordFingering> {
+public class ChordListModel {
 
 	private static final long serialVersionUID = 1L;
+
+    public ChordFingering[] toArray() {
+        return filtered;
+    }
 
 	public int getSize() {
 		return filtered.length;
@@ -44,7 +46,6 @@ public class ChordListModel extends AbstractListModel<ChordFingering> {
 		this.chords = chords;
 		sort();
 		filter();
-		fireContentsChanged(this, 0, filtered.length-1);
 	}
 
 	public ChordFingeringValidator getValidator() {
@@ -54,20 +55,17 @@ public class ChordListModel extends AbstractListModel<ChordFingering> {
 	public void setValidator(ChordFingeringValidator validator) {
 		this.validator = validator;
 		filter();
-		fireContentsChanged(this, 0, filtered.length-1);
 	}
 
 	public void setComparator(ChordFingeringComparator c) {
 		comparator = c;
 		sort();
 		filter();
-		fireContentsChanged(this, 0, filtered.length-1);
 	}
 	
 	public void setFilterDuplicateShapes(boolean filter) {
 		filterDuplicateShapes = filter;
 		filter();
-		fireContentsChanged(this, 0, filtered.length-1);
 	}
 	
 	/**
@@ -103,7 +101,7 @@ public class ChordListModel extends AbstractListModel<ChordFingering> {
 	 */
 	private void filter() {
 		// Select ChordFingerings from chords to satisfy the fingering-uniqueness criterion
-		ArrayList<ChordFingering> firstFiltered = new ArrayList<ChordFingering>();
+		ArrayList<ChordFingering> firstFiltered = new ArrayList<>();
 		if (!filterDuplicateShapes) {
 			for (ChordFingering c : chords)
 				firstFiltered.add(c);

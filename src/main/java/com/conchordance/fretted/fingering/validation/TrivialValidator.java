@@ -1,6 +1,6 @@
-package com.conchordance.fingers.validation;
+package com.conchordance.fretted.fingering.validation;
 
-import com.conchordance.fingers.ChordFingering;
+import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.music.Chord;
 
 

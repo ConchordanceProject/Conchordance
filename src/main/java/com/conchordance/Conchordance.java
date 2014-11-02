@@ -1,11 +1,14 @@
 package com.conchordance;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.instrument.FretboardModel;
-import com.conchordance.instrument.Instrument;
-import com.conchordance.instrument.InstrumentBank;
-import com.conchordance.instrument.RecursionBasedFretboardModel;
+import com.conchordance.fretted.fingering.ChordFingering;
+import com.conchordance.fretted.fingering.list.ChordListModel;
+import com.conchordance.fretted.FretboardModel;
+import com.conchordance.fretted.Instrument;
+import com.conchordance.fretted.InstrumentBank;
+import com.conchordance.fretted.RecursionBasedFretboardModel;
 import com.conchordance.music.*;
+
+import java.util.List;
 
 public class Conchordance {
 
@@ -43,12 +46,12 @@ public class Conchordance {
 		Chord chord = new Chord(root, type);
 		
 		model.setChord(chord);
-		
-		ChordFingering[] chords = new ChordFingering[model.getChordList().getSize()];
-		for (int i = 0; i<chords.length; ++i)
-			chords[i] = model.getChordList().getElementAt(i);
-		
-		return chords;
+        List<ChordFingering> chordList = model.calculateChords();
+
+        ChordListModel chords = new ChordListModel();
+        chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
+
+		return chords.toArray();
 	}
 
 	public FretboardModel getFretboard(String instrumentName, String rootName, String chordTypeName) throws MusicException {

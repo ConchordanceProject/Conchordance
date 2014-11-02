@@ -1,4 +1,4 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import com.conchordance.music.Note;
 import static com.conchordance.music.NoteName.*;

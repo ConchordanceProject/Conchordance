@@ -1,13 +1,12 @@
-package com.conchordance.instrument;
+package com.conchordance.fretted;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conchordance.fingers.ChordFingering;
-import com.conchordance.fingers.list.ChordListModel;
-import com.conchordance.fingers.validation.BaseValidator;
-import com.conchordance.fingers.validation.ChordFingeringValidator;
+import com.conchordance.fretted.fingering.ChordFingering;
+import com.conchordance.fretted.fingering.validation.BaseValidator;
+import com.conchordance.fretted.fingering.validation.ChordFingeringValidator;
 import com.conchordance.music.Chord;
 import com.conchordance.music.Interval;
 import com.conchordance.music.IntervalicNote;
@@ -15,23 +14,16 @@ import com.conchordance.music.Note;
 
 
 public class RecursionBasedFretboardModel extends FretboardModel {
-	public ChordListModel getChordList() {
-		return chords;
-	}
 
 	public void setChord(Chord c) {
 		chord = c;
 		
 		// Changing the chord means the included notes change
 		updateInChord();
-		
-		// Find all fingerings for the new chord
-		calculateChords();
 	}
 
 	public void setMinFret(int f) {
 		minFret = f;
-		calculateChords();
 	}
 	
 	public int getMinFret() {
@@ -50,7 +42,6 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 	public void addCapo(Capo capo) {
 		capos.add(capo);
 		evaluateCapos();
-		calculateChords();
 	}
 	
 	public void addCapo() {
@@ -64,13 +55,11 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 			break;
 		}
 		evaluateCapos();
-		calculateChords();
 	}
 	
 	public void removeCapo(Capo c) {
 		capos.remove(c);
 		evaluateCapos();
-		calculateChords();
 	}
 
 	public List<Capo> getCapos() {
@@ -81,21 +70,16 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		instrument = i;
 		
 		// Reset the capo and min/max settings since the instrument changed.
-		capos = new LinkedList<Capo>();
+		capos = new LinkedList<>();
 		evaluateCapos();
 		maxFret = i.frets;
 		minFret = 1;
 
-		// Notify the layout change before generating new chords
 		updateInChord();
-		notifyFretboardChanged();
-		
-		calculateChords();
 	}
 
 	public void capoMoved() {
 		evaluateCapos();
-		calculateChords();
 	}
 
 	public Instrument getInstrument() {
@@ -127,15 +111,108 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		return fret == instrument.fretNutPositions[string];
 	}
 
+    public List<ChordFingering> calculateChords() {
+        // Find all points on the neck that *could* be included in a chord
+        ArrayList<StringFret> fingerOptions = new ArrayList<>();
+        for (int s = 0; s<instrument.strings; ++s) {
+            for (int f = 0; f<=instrument.frets; ++f) {
+                if (hasChordNoteAt(s, f) && isInRange(s, f) && f > highestCapoedFrets[s])
+                    fingerOptions.add(new StringFret(s, f));
+            }
+        }
+
+        ArrayList<ChordFingering> chordFingerings = new ArrayList<>();
+        ChordFingering base = ChordFingering.trivialChordFingering(chord, instrument.strings);
+
+        // Find the open strings which could be included in a chord.
+        ArrayList<Integer> openStringList = new ArrayList<>();
+        for (int s = 0; s<instrument.strings; ++s) {
+            if (hasChordNoteAt(s, highestCapoedFrets[s]))
+                openStringList.add(s);
+        }
+
+        // Find all open chords (only open strings are played)
+        openStringPatterns = openStringCombinations(openStringList);
+        for (boolean[] pattern : openStringPatterns) {
+            int[] absoluteFrets = new int[instrument.strings];
+            int[] capoRelativeFrets = new int[instrument.strings];
+            int[] fingers = new int[instrument.strings];
+            IntervalicNote[] notes = new IntervalicNote[pattern.length];
+            for (int string = 0; string < instrument.strings; ++string) {
+                if (pattern[string]) {
+                    // Include the open string in this chord
+                    absoluteFrets[string] = highestCapoedFrets[string];
+                    capoRelativeFrets[string] = 0;
+                    notes[string] = inChord[string][highestCapoedFrets[string]];
+                } else {
+                    // The string is not used in this chord
+                    absoluteFrets[string] = -1;
+                    capoRelativeFrets[string] = -1;
+                }
+            }
+            ChordFingering open = new ChordFingering(chord, absoluteFrets, capoRelativeFrets, fingers, notes, false);
+            if (primaryValidator.validate(open, chord))
+                chordFingerings.add(open);
+        }
+
+        // For each legal position, assign finger one to that note and derive new chords from that shape.
+        for (StringFret fingerPos : fingerOptions) {
+            int finger = 1;
+            IntervalicNote note = getChordNoteAt(fingerPos.string, fingerPos.fret);
+            ChordFingering fingering = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, note);
+            ArrayList<StringFret> nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
+            ArrayList<ChordFingering> fingerOneChords = new ArrayList<>();
+            rCalcFingerings(fingering, finger+1, nextFingerOptions, fingerOneChords);
+            chordFingerings.addAll(fingerOneChords);
+
+            // Try to create barred chords
+            int barreFret = fingerPos.fret;
+            toBarre: for (ChordFingering toBarre : fingerOneChords) {
+                boolean canBarre = false;
+                for (int s = fingerPos.string-1; s >=0; --s) {
+                    if (toBarre.absoluteFrets[s] == barreFret || toBarre.capoRelativeFrets[s] == 0) {
+                        canBarre = false;
+                        continue toBarre;
+                    }
+                    if (toBarre.absoluteFrets[s] == -1 && hasChordNoteAt(s, barreFret))
+                        canBarre = true;
+                }
+                if (canBarre) {
+                    ChordFingering tempBarre = toBarre.clone();
+                    for (int s = fingerPos.string-1; s >=0; --s) {
+                        if (toBarre.absoluteFrets[s] == -1 && hasChordNoteAt(s, barreFret)) {
+                            tempBarre.absoluteFrets[s] = barreFret;
+                            tempBarre.capoRelativeFrets[s] = barreFret;
+                            tempBarre.fingers[s] = 1;
+                            tempBarre.notes[s] = inChord[s][barreFret];
+                        }
+                    }
+                    ChordFingering barred = new ChordFingering(chord, tempBarre.absoluteFrets, tempBarre.capoRelativeFrets, tempBarre.fingers, tempBarre.notes, true);
+                    if (primaryValidator.validate(barred, chord))
+                        chordFingerings.add(barred);
+                }
+            }
+
+            for (finger = 2; finger<5; ++finger) {
+                IntervalicNote newNote = getChordNoteAt(fingerPos.string, fingerPos.fret);
+                ChordFingering newChord = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, newNote);
+
+                nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
+                rCalcFingerings(newChord, finger+1, nextFingerOptions, chordFingerings);
+            }
+        }
+
+        return chordFingerings;
+    }
+
     public RecursionBasedFretboardModel() {
         this(Chord.A_MAJOR);
     }
-	
-	public RecursionBasedFretboardModel(Chord chord) {
+
+    public RecursionBasedFretboardModel(Chord chord) {
 		super();
 		this.chord = chord;
 
-		chords = new ChordListModel();
 		instrument = Instrument.GUITAR;
 		primaryValidator = new BaseValidator();
 		minFret = 1;
@@ -144,7 +221,6 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		
 		evaluateCapos();
 		updateInChord();
-		calculateChords();
 	}
 	
 	private void updateInChord() {
@@ -174,100 +250,6 @@ public class RecursionBasedFretboardModel extends FretboardModel {
         // Subtracting the fret nut position does nothing in the normal case, but for banjo-like instruments
         // it moves the open note value up to the correct fret (fifth fret for example)
 		return fret + instrument.tuning[string].halfSteps - instrument.fretNutPositions[string];
-	}
-
-	private void calculateChords() {
-		// Find all points on the neck that *could* be included in a chord
-		ArrayList<StringFret> fingerOptions = new ArrayList<StringFret>();
-		for (int s = 0; s<instrument.strings; ++s) {
-			for (int f = 0; f<=instrument.frets; ++f) {
-				if (hasChordNoteAt(s, f) && isInRange(s, f) && f > highestCapoedFrets[s])
-					fingerOptions.add(new StringFret(s, f));
-			}
-		}
-
-		ArrayList<ChordFingering> chordFingerings = new ArrayList<ChordFingering>();
-		ChordFingering base = ChordFingering.trivialChordFingering(chord, instrument.strings);
-
-		// Find the open strings which could be included in a chord.
-		ArrayList<Integer> openStringList = new ArrayList<Integer>();
-		for (int s = 0; s<instrument.strings; ++s) {
-			if (hasChordNoteAt(s, highestCapoedFrets[s]))
-				openStringList.add(s);
-		}
-
-		// Find all open chords (only open strings are played)
-		openStringPatterns = openStringCombinations(openStringList);
-		for (boolean[] pattern : openStringPatterns) {
-			int[] absoluteFrets = new int[instrument.strings];
-			int[] capoRelativeFrets = new int[instrument.strings];
-			int[] fingers = new int[instrument.strings];
-			IntervalicNote[] notes = new IntervalicNote[pattern.length];
-			for (int string = 0; string < instrument.strings; ++string) {
-				if (pattern[string]) {
-					// Include the open string in this chord
-					absoluteFrets[string] = highestCapoedFrets[string];
-					capoRelativeFrets[string] = 0;
-					notes[string] = inChord[string][highestCapoedFrets[string]];
-				} else {
-					// The string is not used in this chord
-					absoluteFrets[string] = -1;
-					capoRelativeFrets[string] = -1;
-				}
-			}
-			ChordFingering open = new ChordFingering(chord, absoluteFrets, capoRelativeFrets, fingers, notes, false);
-			if (primaryValidator.validate(open, chord))
-				chordFingerings.add(open);
-		}
-		
-		// For each legal position, assign finger one to that note and derive new chords from that shape.
-		for (StringFret fingerPos : fingerOptions) {
-			int finger = 1;
-			IntervalicNote note = getChordNoteAt(fingerPos.string, fingerPos.fret);
-			ChordFingering fingering = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, note);
-			ArrayList<StringFret> nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
-			ArrayList<ChordFingering> fingerOneChords = new ArrayList<ChordFingering>();
-			rCalcFingerings(fingering, finger+1, nextFingerOptions, fingerOneChords);
-			chordFingerings.addAll(fingerOneChords);
-			
-			// Try to create barred chords
-			int barreFret = fingerPos.fret;
-			toBarre: for (ChordFingering toBarre : fingerOneChords) {
-				boolean canBarre = false;
-				for (int s = fingerPos.string-1; s >=0; --s) {
-					if (toBarre.absoluteFrets[s] == barreFret || toBarre.capoRelativeFrets[s] == 0) {
-						canBarre = false;
-						continue toBarre;
-					}
-					if (toBarre.absoluteFrets[s] == -1 && hasChordNoteAt(s, barreFret))
-						canBarre = true;
-				}
-				if (canBarre) {
-					ChordFingering tempBarre = toBarre.clone();
-					for (int s = fingerPos.string-1; s >=0; --s) {
-						if (toBarre.absoluteFrets[s] == -1 && hasChordNoteAt(s, barreFret)) {
-							tempBarre.absoluteFrets[s] = barreFret;
-							tempBarre.capoRelativeFrets[s] = barreFret;
-							tempBarre.fingers[s] = 1;
-							tempBarre.notes[s] = inChord[s][barreFret];
-						}
-					}
-					ChordFingering barred = new ChordFingering(chord, tempBarre.absoluteFrets, tempBarre.capoRelativeFrets, tempBarre.fingers, tempBarre.notes, true);
-					if (primaryValidator.validate(barred, chord))
-						chordFingerings.add(barred);
-				}
-			}
-		
-			for (finger = 2; finger<5; ++finger) {
-				IntervalicNote newNote = getChordNoteAt(fingerPos.string, fingerPos.fret);
-				ChordFingering newChord = base.clone(fingerPos.string, fingerPos.fret, fingerPos.fret, finger, newNote);
-				
-				nextFingerOptions = removeIllegal(fingerOptions, fingerPos, finger);
-				rCalcFingerings(newChord, finger+1, nextFingerOptions, chordFingerings);
-			}
-		}
-
-		chords.setChords(chordFingerings.toArray(new ChordFingering[chordFingerings.size()]));
 	}
 	
 	/**
@@ -354,7 +336,6 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		}
 	}
 
-	private ChordListModel chords;
 	private Chord chord;
 	private Instrument instrument;
 	private boolean[][] openStringPatterns;
