@@ -62,7 +62,21 @@ public class ChordResource {
             throw new ExceptionResponse(400, muse.getMessage());
         }
     }
-    
+
+    @GET
+    @Path("/alternate-fingerings")
+    public ChordFingering[] getAlternateFingerings(
+            @QueryParam("instrument") String instrumentName,
+            @QueryParam("frets") String frets,
+            @QueryParam("type") String chordType,
+            @QueryParam("root") String root) {
+        try {
+            return conchordance.getChords(instrumentName, root, chordType, frets);
+        } catch (MusicException muse) {
+            throw new ExceptionResponse(400, muse.getMessage());
+        }
+    }
+
     @OPTIONS
     @Path("/fingerings")
     public void fingeringOptions() {

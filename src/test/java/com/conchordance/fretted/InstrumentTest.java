@@ -65,7 +65,7 @@ public class InstrumentTest {
 		FretboardModel model = new RecursionBasedFretboardModel(Chord.A_MAJOR);
 		model.setInstrument(openA);
 		
-		List<ChordFingering> chords = model.calculateChords();
+		List<ChordFingering> chords = model.calculateFingerings();
 		assertEquals("Only one chord found", 1, chords.size());
 	}
 	
@@ -98,7 +98,7 @@ public class InstrumentTest {
 		model.setChord(chord);
 		boolean found = false;
 		
-		List<ChordFingering> chords = model.calculateChords();
+		List<ChordFingering> chords = model.calculateFingerings();
 		for (ChordFingering fingering : chords) {
 			if (Arrays.equals(frets, fingering.absoluteFrets)) {
 				found = true;

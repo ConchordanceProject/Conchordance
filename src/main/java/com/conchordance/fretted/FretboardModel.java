@@ -100,7 +100,9 @@ public abstract class FretboardModel {
 	 */
 	public abstract void removeCapo(Capo capo);
 
-    public abstract List<ChordFingering> calculateChords();
+    public abstract List<ChordFingering> calculateFingerings();
+
+    public abstract List<ChordFingering> calculateFingerings(int[] frets);
 
     /**
      *

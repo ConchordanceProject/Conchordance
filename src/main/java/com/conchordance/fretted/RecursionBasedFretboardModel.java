@@ -32,7 +32,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 
 	public void setMaxFret(int f) {
 		maxFret = f;
-		calculateChords();
+		calculateFingerings();
 	}
 
 	public int getMaxFret() {
@@ -111,7 +111,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 		return fret == instrument.fretNutPositions[string];
 	}
 
-    public List<ChordFingering> calculateChords() {
+    public List<ChordFingering> calculateFingerings() {
         // Find all points on the neck that *could* be included in a chord
         ArrayList<StringFret> fingerOptions = new ArrayList<>();
         for (int s = 0; s<instrument.strings; ++s) {
@@ -121,6 +121,38 @@ public class RecursionBasedFretboardModel extends FretboardModel {
             }
         }
 
+        return calculateFingerings(fingerOptions);
+    }
+
+    public List<ChordFingering> calculateFingerings(int[] frets) {
+        ArrayList<StringFret> fingerOptions = new ArrayList<>();
+        for (int string = 0; string<frets.length; ++string) {
+            if (frets[string] >= 0)
+                fingerOptions.add(new StringFret(string, frets[string]));
+        }
+
+        return calculateFingerings(fingerOptions);
+    }
+
+    public RecursionBasedFretboardModel() {
+        this(Chord.A_MAJOR);
+    }
+
+    public RecursionBasedFretboardModel(Chord chord) {
+		super();
+		this.chord = chord;
+
+		instrument = Instrument.GUITAR;
+		primaryValidator = new BaseValidator();
+		minFret = 1;
+		maxFret = instrument.frets;
+		capos = new LinkedList<>();
+		
+		evaluateCapos();
+		updateInChord();
+	}
+
+    private List<ChordFingering> calculateFingerings(ArrayList<StringFret> fingerOptions) {
         ArrayList<ChordFingering> chordFingerings = new ArrayList<>();
         ChordFingering base = ChordFingering.trivialChordFingering(chord, instrument.strings);
 
@@ -205,25 +237,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
         return chordFingerings;
     }
 
-    public RecursionBasedFretboardModel() {
-        this(Chord.A_MAJOR);
-    }
-
-    public RecursionBasedFretboardModel(Chord chord) {
-		super();
-		this.chord = chord;
-
-		instrument = Instrument.GUITAR;
-		primaryValidator = new BaseValidator();
-		minFret = 1;
-		maxFret = instrument.frets;
-		capos = new LinkedList<>();
-		
-		evaluateCapos();
-		updateInChord();
-	}
-	
-	private void updateInChord() {
+    private void updateInChord() {
 		inChord = new IntervalicNote[instrument.strings][instrument.frets+1];
 		for (int string = 0; string<instrument.strings; ++string) {
             // Iterate up this string starting at the nut (for this string)
