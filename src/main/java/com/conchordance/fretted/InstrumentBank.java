@@ -38,7 +38,7 @@ public class InstrumentBank {
 	
 	public Instrument getInstrument(String name) throws MusicException {
         if (!instrumentNames.containsKey(name))
-            throw new MusicException("No fretted could be found called \"" + name + "\".");
+            throw new MusicException("No instrument could be found called \"" + name + "\".");
 		return instrumentNames.get(name);
 	}
 	
