@@ -2,11 +2,16 @@ package com.conchordance.fretted;
 
 import static com.conchordance.music.NoteName.E;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.conchordance.fretted.fingering.list.ChordListModel;
+import com.conchordance.fretted.fingering.validation.ExactShapeValidator;
 import com.conchordance.music.NoteName;
 import org.junit.Test;
 
@@ -18,6 +23,26 @@ import static com.conchordance.music.NoteName.*;
 
 
 public class InstrumentTest {
+
+	@Test
+	public void testAlternateFingerings() {
+		System.out.println("Alternate fingerings:");
+		FretboardModel model = new RecursionBasedFretboardModel(Chord.A_MAJOR);
+		int[] aMajorFrets = new int[]{0, 2, 2, 2, 0, 0};
+
+		List<ChordFingering> fingerings = model.calculateFingerings(aMajorFrets);
+		ChordListModel chords = new ChordListModel();
+		chords.setFilterDuplicateShapes(false);
+		chords.setValidator(new ExactShapeValidator(aMajorFrets));
+		chords.setChords(fingerings.toArray(new ChordFingering[fingerings.size()]));
+
+		LinkedList<int[]> uniqueFingerings = new LinkedList<>();
+		for (ChordFingering f : chords.toArray()) {
+			for (int[] otherFingers : uniqueFingerings)
+				assertFalse("No duplicate fingerings", Arrays.equals(otherFingers, f.fingers));
+			uniqueFingerings.add(f.fingers);
+		}
+	}
 
     /**
      *
@@ -65,7 +90,7 @@ public class InstrumentTest {
 		FretboardModel model = new RecursionBasedFretboardModel(Chord.A_MAJOR);
 		model.setInstrument(openA);
 		
-		List<ChordFingering> chords = model.calculateChords();
+		List<ChordFingering> chords = model.calculateFingerings();
 		assertEquals("Only one chord found", 1, chords.size());
 	}
 	
@@ -98,7 +123,7 @@ public class InstrumentTest {
 		model.setChord(chord);
 		boolean found = false;
 		
-		List<ChordFingering> chords = model.calculateChords();
+		List<ChordFingering> chords = model.calculateFingerings();
 		for (ChordFingering fingering : chords) {
 			if (Arrays.equals(frets, fingering.absoluteFrets)) {
 				found = true;
