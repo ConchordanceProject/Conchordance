@@ -127,7 +127,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
     public List<ChordFingering> calculateFingerings(int[] frets) {
         ArrayList<StringFret> fingerOptions = new ArrayList<>();
         for (int string = 0; string<frets.length; ++string) {
-            if (frets[string] >= 0)
+            if (frets[string] > 0)
                 fingerOptions.add(new StringFret(string, frets[string]));
         }
 
