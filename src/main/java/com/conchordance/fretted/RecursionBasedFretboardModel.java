@@ -115,7 +115,7 @@ public class RecursionBasedFretboardModel extends FretboardModel {
         // Find all points on the neck that *could* be included in a chord
         ArrayList<StringFret> fingerOptions = new ArrayList<>();
         for (int s = 0; s<instrument.strings; ++s) {
-            for (int f = 0; f<=instrument.frets; ++f) {
+            for (int f = 1; f<=instrument.frets; ++f) {
                 if (hasChordNoteAt(s, f) && isInRange(s, f) && f > highestCapoedFrets[s])
                     fingerOptions.add(new StringFret(s, f));
             }
