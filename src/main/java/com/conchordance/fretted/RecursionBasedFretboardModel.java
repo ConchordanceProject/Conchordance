@@ -299,15 +299,24 @@ public class RecursionBasedFretboardModel extends FretboardModel {
 			chordFingerings.add(current);
 
 		// Derive chords that include open strings
-		patterns: for (boolean[] pattern : openStringPatterns) {
+		for (boolean[] pattern : openStringPatterns) {
+			boolean perfectMatch = true;
+			for (int string = 0; string<instrument.strings; ++string) {
+				if (pattern[string] && current.capoRelativeFrets[string] != -1)
+					perfectMatch = false;
+			}
+
+			// These open strings should be "added" to form a new chord only if
+			// none of the strings are being used
+			if (!perfectMatch)
+				continue;
+
 			int[] absoluteFrets = current.absoluteFrets.clone();
 			int[] capoRelativeFrets = current.capoRelativeFrets.clone();
 			int[] fingers = current.fingers.clone();
 			IntervalicNote[] notes = current.notes.clone();
 			for (int string = 0; string < instrument.strings; ++string) {
 				if (pattern[string]) {
-					if (notes[string] != null)
-						continue patterns;
 					absoluteFrets[string] = highestCapoedFrets[string];
 					capoRelativeFrets[string] = 0;
 					notes[string] = inChord[string][highestCapoedFrets[string]];
