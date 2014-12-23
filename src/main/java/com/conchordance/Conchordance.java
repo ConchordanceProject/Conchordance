@@ -1,11 +1,11 @@
 package com.conchordance;
 
 import com.conchordance.fretted.fingering.ChordFingering;
+import com.conchordance.fretted.fingering.RecursiveChordFingeringGenerator;
 import com.conchordance.fretted.fingering.list.ChordListModel;
 import com.conchordance.fretted.FretboardModel;
 import com.conchordance.fretted.Instrument;
 import com.conchordance.fretted.InstrumentBank;
-import com.conchordance.fretted.RecursionBasedFretboardModel;
 import com.conchordance.fretted.fingering.validation.ExactShapeValidator;
 import com.conchordance.music.*;
 
@@ -17,11 +17,11 @@ public class Conchordance {
         Chord chord = getChord(rootName, chordTypeName);
 
         Instrument instrument = instrumentBank.getInstrument(instrumentName);
-        model.setInstrument(instrument);
+        fretboard.setInstrument(instrument);
 
         int[] fretPositions = parseFretsParameter(frets, instrument.strings);
 
-        return model.getChordFingering(chord, fretPositions);
+        return fretboard.getChordFingering(chord, fretPositions);
     }
 	
 	public Chord getChord(String rootName, String chordTypeName) throws MusicException {
@@ -32,14 +32,14 @@ public class Conchordance {
 
 	public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName) throws MusicException {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
-		model.setInstrument(instrument);
+		fretboard.setInstrument(instrument);
 		
 		Note root = Note.parse(rootName);
 		ChordType type = chordTypeBank.getChordType(chordTypeName);
 		Chord chord = new Chord(root, type);
 		
-		model.setChord(chord);
-        List<ChordFingering> chordList = model.calculateFingerings();
+		fretboard.setChord(chord);
+        List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getChordFingerings(fretboard);
 
         ChordListModel chords = new ChordListModel();
         chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
@@ -49,15 +49,15 @@ public class Conchordance {
 
     public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName, String frets) throws MusicException {
         Instrument instrument = instrumentBank.getInstrument(instrumentName);
-        model.setInstrument(instrument);
+        fretboard.setInstrument(instrument);
 
         Note root = Note.parse(rootName);
         ChordType type = chordTypeBank.getChordType(chordTypeName);
         Chord chord = new Chord(root, type);
 
         int[] fretPositions = parseFretsParameter(frets, instrument.strings);
-        model.setChord(chord);
-        List<ChordFingering> chordList = model.calculateFingerings(fretPositions);
+        fretboard.setChord(chord);
+        List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getChordFingerings(fretboard, fretPositions);
 
         ChordListModel chords = new ChordListModel();
         chords.setFilterDuplicateShapes(false);
@@ -70,19 +70,19 @@ public class Conchordance {
 
     public FretboardModel getFretboard(String instrumentName, String rootName, String chordTypeName) throws MusicException {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
-		model.setInstrument(instrument);
+		fretboard.setInstrument(instrument);
 		
 		Note root = Note.parse(rootName);
 		ChordType type = chordTypeBank.getChordType(chordTypeName);
 		Chord chord = new Chord(root, type);
 		
-		model.setChord(chord);
+		fretboard.setChord(chord);
 		
-		return model;
+		return fretboard;
 	}
 	
 	public Conchordance() {
-		model = new RecursionBasedFretboardModel(Chord.A_MAJOR);
+		fretboard = new FretboardModel();
 		instrumentBank = InstrumentBank.DEFAULT_BANK;
 		chordTypeBank = ChordTypeBank.DEFAULT_BANK;
 	}
@@ -100,7 +100,7 @@ public class Conchordance {
         return fretPositions;
     }
 	
-	private FretboardModel model;
+	private FretboardModel fretboard;
 	
 	private InstrumentBank instrumentBank;
 	
