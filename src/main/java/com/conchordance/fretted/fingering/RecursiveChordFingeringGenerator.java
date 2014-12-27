@@ -68,7 +68,7 @@ public class RecursiveChordFingeringGenerator implements ChordFingeringGenerator
 						return false;
 				}
 
-				return candidate.sortedNotes.length >= 3;
+				return candidate.numFingersUsed >= 3;
 			}
 		};
 
