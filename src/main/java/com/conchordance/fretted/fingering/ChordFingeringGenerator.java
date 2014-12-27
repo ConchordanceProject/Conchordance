@@ -18,4 +18,6 @@ public interface ChordFingeringGenerator {
 	 */
 	public abstract List<ChordFingering> getChordFingerings(FretboardModel fretboard, int[] frets);
 
+	public abstract List<ChordFingering> getAllChordFingerings(FretboardModel fretboard);
+
 }
