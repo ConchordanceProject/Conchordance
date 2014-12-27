@@ -63,7 +63,12 @@ public class RecursiveChordFingeringGenerator implements ChordFingeringGenerator
 		validator = new ChordFingeringValidator() {
 			@Override
 			public boolean validate(ChordFingering candidate, Chord compareTo) {
-				return candidate.notes.length >= 4;
+				for (int string = 0; string<candidate.capoRelativeFrets.length; ++string) {
+					if (candidate.capoRelativeFrets[string] == 0)
+						return false;
+				}
+
+				return candidate.sortedNotes.length >= 3;
 			}
 		};
 
