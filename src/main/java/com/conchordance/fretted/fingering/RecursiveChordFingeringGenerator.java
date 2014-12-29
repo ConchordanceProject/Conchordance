@@ -63,12 +63,19 @@ public class RecursiveChordFingeringGenerator implements ChordFingeringGenerator
 		validator = new ChordFingeringValidator() {
 			@Override
 			public boolean validate(ChordFingering candidate, Chord compareTo) {
+				boolean firstFretUsed = false;
+
 				for (int string = 0; string<candidate.capoRelativeFrets.length; ++string) {
+					// To simplify, we leave out any shapes that include open strings
 					if (candidate.capoRelativeFrets[string] == 0)
 						return false;
+
+					if (candidate.absoluteFrets[string] == 1)
+						firstFretUsed = true;
 				}
 
-				return candidate.numFingersUsed >= 3;
+				// To simplify, require at least three fingers are used
+				return firstFretUsed && candidate.numFingersUsed >= 3;
 			}
 		};
 
