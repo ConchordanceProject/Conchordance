@@ -2,6 +2,7 @@ package com.conchordance;
 
 import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.fretted.fingering.RecursiveChordFingeringGenerator;
+import com.conchordance.fretted.fingering.list.ChordFingeringComparator;
 import com.conchordance.fretted.fingering.list.ChordListModel;
 import com.conchordance.fretted.FretboardModel;
 import com.conchordance.fretted.Instrument;
@@ -38,6 +39,8 @@ public class Conchordance {
 		List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getAllChordFingerings(fretboard);
 
 		ChordListModel chords = new ChordListModel();
+		//chords.setComparator(new ChordFingeringComparator.ShapeComparator());
+		chords.setComparator(new ChordFingeringComparator.ShapeComparator());
 		chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
 
 		return chords.toArray();

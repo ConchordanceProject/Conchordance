@@ -11,15 +11,7 @@ import com.conchordance.music.IntervalicNote;
  *
  */
 public interface ChordFingeringComparator extends Comparator<ChordFingering> {
-	/**
-	 * Instances of comparators under this interface.
-	 */
-	public static final ChordFingeringComparator[] instances = {
-		new MusicallyDecreasingComparator(),
-		new MusicallyIncreasingComparator(),
-		new InversionComparator(),
-	};
-	
+
 	/**
 	 * Compare two ChordFingerings and give an integer result.
 	 * @param a the first ChordFingering
@@ -27,7 +19,31 @@ public interface ChordFingeringComparator extends Comparator<ChordFingering> {
 	 * @return 0 if a is equal to b, a negative value if a is less than b, and a positive value otherwise 
 	 */
 	public int compare(ChordFingering a, ChordFingering b);
-	
+
+	public class ShapeComparator implements ChordFingeringComparator {
+		public int compare(ChordFingering a, ChordFingering b) {
+			if (a.position < b.position)
+				return -1;
+			else if (a.position > b.position)
+				return 1;
+
+			for (int fret = a.position; fret <= a.position+5; ++fret) {
+				// TODO This should not assume that both ChordFingerings have the same number of strings
+				for (int string = 0; string < a.absoluteFrets.length; ++string) {
+					boolean aHasNote = a.absoluteFrets[string] == fret;
+					boolean bHasNote = b.absoluteFrets[string] == fret;
+
+					if (aHasNote && !bHasNote)
+						return -1;
+					if (bHasNote && !aHasNote)
+						return 1;
+				}
+			}
+
+			return 0;
+		}
+	}
+
 	/**
 	 * Compares two ChordFingerings by comparing their notes, and returning their ordering relative to a musically increasing order.
 	 *
