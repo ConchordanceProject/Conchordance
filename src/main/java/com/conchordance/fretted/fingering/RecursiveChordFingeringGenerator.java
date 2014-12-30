@@ -5,6 +5,7 @@ import com.conchordance.fretted.FretboardModel;
 import com.conchordance.fretted.Instrument;
 import com.conchordance.fretted.fingering.validation.BaseValidator;
 import com.conchordance.fretted.fingering.validation.ChordFingeringValidator;
+import com.conchordance.fretted.fingering.validation.TrivialValidator;
 import com.conchordance.music.Chord;
 import com.conchordance.music.IntervalicNote;
 
@@ -42,6 +43,45 @@ public class RecursiveChordFingeringGenerator implements ChordFingeringGenerator
 		}
 
 		return calculateFingerings(fingerOptions);
+	}
+
+	public List<ChordFingering> getAllChordFingerings(FretboardModel fretboard) {
+		this.fretboard = fretboard;
+		this.instrument = fretboard.getInstrument();
+		this.chord = fretboard.getChord();
+
+		// all positions below the 6th fret are available
+		ArrayList<StringFret> fingerOptions = new ArrayList<>();
+		for (int s = 0; s<instrument.strings; ++s) {
+			for (int f = 1; f<=5; ++f) {
+				if (fretboard.isInRange(s, f))
+					fingerOptions.add(new StringFret(s, f));
+			}
+		}
+
+		ChordFingeringValidator oldValidator = validator;
+		validator = new ChordFingeringValidator() {
+			@Override
+			public boolean validate(ChordFingering candidate, Chord compareTo) {
+				boolean firstFretUsed = false;
+
+				for (int string = 0; string<candidate.capoRelativeFrets.length; ++string) {
+					// To simplify, we leave out any shapes that include open strings
+					if (candidate.capoRelativeFrets[string] == 0)
+						return false;
+
+					if (candidate.absoluteFrets[string] == 1)
+						firstFretUsed = true;
+				}
+
+				// To simplify, require at least three fingers are used
+				return firstFretUsed && candidate.numFingersUsed >= 3;
+			}
+		};
+
+		List<ChordFingering> fingerings = calculateFingerings(fingerOptions);
+		validator = oldValidator;
+		return fingerings;
 	}
 
 	public RecursiveChordFingeringGenerator() {

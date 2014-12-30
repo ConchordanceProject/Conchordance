@@ -2,6 +2,7 @@ package com.conchordance;
 
 import com.conchordance.fretted.fingering.ChordFingering;
 import com.conchordance.fretted.fingering.RecursiveChordFingeringGenerator;
+import com.conchordance.fretted.fingering.list.ChordFingeringComparator;
 import com.conchordance.fretted.fingering.list.ChordListModel;
 import com.conchordance.fretted.FretboardModel;
 import com.conchordance.fretted.Instrument;
@@ -30,19 +31,34 @@ public class Conchordance {
 		return new Chord(root, type);
 	}
 
+	public ChordFingering[] getAllChords(String instrumentName) throws MusicException {
+		Instrument instrument = instrumentBank.getInstrument(instrumentName);
+		fretboard.setInstrument(instrument);
+
+		fretboard.setChord(Chord.A_MAJOR);
+		List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getAllChordFingerings(fretboard);
+
+		ChordListModel chords = new ChordListModel();
+		//chords.setComparator(new ChordFingeringComparator.ShapeComparator());
+		chords.setComparator(new ChordFingeringComparator.ShapeComparator());
+		chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
+
+		return chords.toArray();
+	}
+
 	public ChordFingering[] getChords(String instrumentName, String rootName, String chordTypeName) throws MusicException {
 		Instrument instrument = instrumentBank.getInstrument(instrumentName);
 		fretboard.setInstrument(instrument);
-		
+
 		Note root = Note.parse(rootName);
 		ChordType type = chordTypeBank.getChordType(chordTypeName);
 		Chord chord = new Chord(root, type);
-		
-		fretboard.setChord(chord);
-        List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getChordFingerings(fretboard);
 
-        ChordListModel chords = new ChordListModel();
-        chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
+		fretboard.setChord(chord);
+		List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getChordFingerings(fretboard);
+
+		ChordListModel chords = new ChordListModel();
+		chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
 
 		return chords.toArray();
 	}

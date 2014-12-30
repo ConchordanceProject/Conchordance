@@ -50,18 +50,29 @@ public class ChordResource {
     public void options() {
     }
 
-    @GET
-    @Path("/fingerings")
-    public ChordFingering[] getChordFingering(
-            @QueryParam("instrument") String instrumentName,
-            @QueryParam("type") String chordType,
-            @QueryParam("root") String root) {
-        try {
-            return conchordance.getChords(instrumentName, root, chordType);
-        } catch (MusicException muse) {
-            throw new ExceptionResponse(400, muse.getMessage());
-        }
-    }
+	@GET
+	@Path("/all")
+	public ChordFingering[] getChordFingering(
+			@QueryParam("instrument") String instrumentName) {
+		try {
+			return conchordance.getAllChords(instrumentName);
+		} catch (MusicException muse) {
+			throw new ExceptionResponse(400, muse.getMessage());
+		}
+	}
+
+	@GET
+	@Path("/fingerings")
+	public ChordFingering[] getChordFingering(
+			@QueryParam("instrument") String instrumentName,
+			@QueryParam("type") String chordType,
+			@QueryParam("root") String root) {
+		try {
+			return conchordance.getChords(instrumentName, root, chordType);
+		} catch (MusicException muse) {
+			throw new ExceptionResponse(400, muse.getMessage());
+		}
+	}
 
     @GET
     @Path("/alternate-fingerings")
