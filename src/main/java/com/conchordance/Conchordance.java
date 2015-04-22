@@ -39,7 +39,6 @@ public class Conchordance {
 		List<ChordFingering> chordList = new RecursiveChordFingeringGenerator().getAllChordFingerings(fretboard);
 
 		ChordListModel chords = new ChordListModel();
-		//chords.setComparator(new ChordFingeringComparator.ShapeComparator());
 		chords.setComparator(new ChordFingeringComparator.ShapeComparator());
 		chords.setChords(chordList.toArray(new ChordFingering[chordList.size()]));
 
