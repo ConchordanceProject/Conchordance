@@ -1,5 +1,6 @@
 package com.conchordance.fretted;
 
+import com.conchordance.music.Clef;
 import com.conchordance.music.Note;
 import static com.conchordance.music.NoteName.*;
 
@@ -12,14 +13,14 @@ public class Instrument {
 	/**
 	 * Guitar in standard tuning.
 	 */
-	public static final Instrument GUITAR = new Instrument("Guitar", 14,
+	public static final Instrument GUITAR = new Instrument("Guitar", 14, Clef.TREBLE,
 			new Note[] {new Note(E, 0, 5), new Note(B, 0, 4), new Note(G, 0, 4), new Note(D, 0, 4), new Note(A, 0, 3), new Note(E, 0, 3)});
 
     /**
      * 5-String banjo (GCGBD)
      *
      */
-    public static final Instrument BANJO = new Instrument("5-String Banjo", 12,
+    public static final Instrument BANJO = new Instrument("5-String Banjo", 12, Clef.TREBLE,
             new Note[] {new Note(D, 0, 5), new Note(B, 0, 4), new Note(G, 0, 4), new Note(C, 0, 4), new Note(G, 0, 5)},
             new int[] {0, 0, 0, 0, 5});
 	
@@ -33,6 +34,14 @@ public class Instrument {
 	 * The tuning is considered to be the note conceptually at the 0th fret. If a string is tuned to a G at the fifth fret (as in the five-string banjo) that string conceptually tunes to a D at the 0th fret.
 	 */
 	public final Note[] tuning;
+
+    /**
+     * The clef that this instrument's sheet music should be rendered in.
+     *
+     * Note that the note values shouldn't change because of this. All notes should be stored as if they are in the treble clef,
+     * it is up to a UI to convert them to bass if necessary
+     */
+    public final String clef;
 
 	/**
 	 * The number of frets up the neck where each string begins.
@@ -58,15 +67,16 @@ public class Instrument {
 		return name;
 	}
 
-	public Instrument(String name, int frets, Note[] tuning, int[] fretNutPositions) {
+	public Instrument(String name, int frets, Clef clef, Note[] tuning, int[] fretNutPositions) {
 		this.name = name;
 		this.tuning = tuning;
 		this.fretNutPositions = fretNutPositions;
 		this.frets = frets;
+        this.clef = clef.name().toLowerCase();
 		strings = tuning.length;
 	}
 
-	public Instrument(String name, int frets, Note... tuning) {
-		this(name, frets, tuning, new int[tuning.length]);
+	public Instrument(String name, int frets, Clef clef, Note... tuning) {
+		this(name, frets, clef, tuning, new int[tuning.length]);
 	}
 }
