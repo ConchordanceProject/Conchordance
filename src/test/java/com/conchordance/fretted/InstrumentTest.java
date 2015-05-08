@@ -12,13 +12,11 @@ import java.util.List;
 import com.conchordance.fretted.fingering.RecursiveChordFingeringGenerator;
 import com.conchordance.fretted.fingering.list.ChordListModel;
 import com.conchordance.fretted.fingering.validation.ExactShapeValidator;
-import com.conchordance.music.NoteName;
+import com.conchordance.music.*;
 import org.junit.Test;
 
 import com.conchordance.fretted.fingering.ChordFingering;
-import com.conchordance.music.Chord;
-import com.conchordance.music.ChordType;
-import com.conchordance.music.Note;
+
 import static com.conchordance.music.NoteName.*;
 
 
@@ -88,7 +86,7 @@ public class InstrumentTest {
 	 */
 	@Test
 	public void openChord() {
-		Instrument openA = new Instrument("Open A", 1, Chord.A_MAJOR.notes[0], Chord.A_MAJOR.notes[0], Chord.A_MAJOR.notes[1], Chord.A_MAJOR.notes[2]);		
+		Instrument openA = new Instrument("Open A", 1, Clef.TREBLE, Chord.A_MAJOR.notes[0], Chord.A_MAJOR.notes[0], Chord.A_MAJOR.notes[1], Chord.A_MAJOR.notes[2]);
 		FretboardModel fretboard = new FretboardModel(openA, Chord.A_MAJOR);
 		
 		List<ChordFingering> chords = new RecursiveChordFingeringGenerator().getChordFingerings(fretboard);
