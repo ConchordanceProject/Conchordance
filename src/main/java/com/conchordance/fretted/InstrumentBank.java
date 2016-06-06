@@ -39,7 +39,7 @@ public class InstrumentBank {
 		DEFAULT_BANK.addInstrument(new Instrument("Mandolin", 12, Clef.TREBLE,
 				new Note(E, 0, 5), new Note(A, 0, 4), new Note(D, 0, 4), new Note(G, 0, 3)));
 
-		DEFAULT_BANK.addInstrument(new Instrument("Ukulele (GCEA)", 12, Clef.TREBLE,
+		DEFAULT_BANK.addInstrument(new Instrument("Ukulele - GCEA", 12, Clef.TREBLE,
 				new Note(A, 0, 5), new Note(E, 0, 5), new Note(C, 0, 5), new Note(G, 0, 5)));
 
 		DEFAULT_BANK.addInstrument(Instrument.BANJO);
