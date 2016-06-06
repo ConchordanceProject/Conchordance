@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.conchordance.music.Clef;
 import com.conchordance.music.MusicException;
 import com.conchordance.music.Note;
 import static com.conchordance.music.NoteName.*;
@@ -20,22 +21,22 @@ public class InstrumentBank {
 
 		DEFAULT_BANK.addInstrument(Instrument.GUITAR);
 
-        DEFAULT_BANK.addInstrument(new Instrument("Guitar - DADGAD", 14,
+        DEFAULT_BANK.addInstrument(new Instrument("Guitar - DADGAD", 14, Clef.TREBLE,
                 new Note[] {new Note(D, 0, 5), new Note(A, 0, 4), new Note(G, 0, 4), new Note(D, 0, 4), new Note(A, 0, 3), new Note(D, 0, 3)}));
 
-        DEFAULT_BANK.addInstrument(new Instrument("Guitar - DADF#AD", 14,
+        DEFAULT_BANK.addInstrument(new Instrument("Guitar - DADF#AD", 14, Clef.TREBLE,
                 new Note[] {new Note(D, 0, 5), new Note(A, 0, 4), new Note(F, 1, 4), new Note(D, 0, 4), new Note(A, 0, 3), new Note(D, 0, 3)}));
 
-		DEFAULT_BANK.addInstrument(new Instrument("Guitar - Drop D", 14,
+		DEFAULT_BANK.addInstrument(new Instrument("Guitar - Drop D", 14, Clef.TREBLE,
 				new Note[] {new Note(E, 0, 5), new Note(B, 0, 4), new Note(G, 0, 4), new Note(D, 0, 4), new Note(A, 0, 3), new Note(D, 0, 3)}));
 
-        DEFAULT_BANK.addInstrument(new Instrument("Bass Guitar", 14,
-                new Note[] {new Note(G, 0, 4), new Note(D, 0, 4), new Note(A, 0, 3), new Note(E, 0, 3)}));
+        DEFAULT_BANK.addInstrument(new Instrument("Bass Guitar", 14, Clef.BASS,
+                new Note[] {new Note(G, 0, 2), new Note(D, 0, 2), new Note(A, 0, 1), new Note(E, 0, 1)}));
 
-		DEFAULT_BANK.addInstrument(new Instrument("Irish Bouzouki", 12,
+		DEFAULT_BANK.addInstrument(new Instrument("Irish Bouzouki", 12, Clef.TREBLE,
 				new Note[] {new Note(D, 0, 5), new Note(A, 0, 4), new Note(D, 0, 4), new Note(G, 0, 3)}));
 
-		DEFAULT_BANK.addInstrument(new Instrument("Mandolin", 12,
+		DEFAULT_BANK.addInstrument(new Instrument("Mandolin", 12, Clef.TREBLE,
 				new Note[] {new Note(E, 0, 5), new Note(A, 0, 4), new Note(D, 0, 4), new Note(G, 0, 3)}));
 
 		DEFAULT_BANK.addInstrument(Instrument.BANJO);
