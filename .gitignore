@@ -1,12 +1,6 @@
-# java
-bin
-*.class
-
 # gradle
 build
-target
 .gradle
-gradle
 
 # OS X
 .DS_Store
@@ -17,6 +11,9 @@ gradle
 .settings
 
 # intellij
-.idea
-*.iml
-*.iws
+Conchordance.ipr
+Conchordance.iml
+Conchordance.iws
+
+# Heroku
+.env

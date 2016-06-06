@@ -4,8 +4,8 @@ apply plugin: 'idea'
 apply plugin: 'application'
 apply plugin: 'fatjar'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 group = 'com.conchordance'
 version = '1.0.0a'
@@ -25,7 +25,7 @@ buildscript {
 }
 
 dependencies {
-	compile "io.dropwizard:dropwizard-core:0.7.1"
+	compile "io.dropwizard:dropwizard-core:0.9.2"
     testCompile 'junit:junit:4.11'
 }
 
@@ -39,4 +39,8 @@ fatJar {
 	manifest {
 		attributes "Main-Class": mainClassName
 	}
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
 }
+
+// Used by Heroku to stage the app
+task stage(dependsOn: ['clean', 'fatJar'])
