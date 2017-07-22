@@ -1,1 +1,0 @@
-web: java -Ddw.server.applicationConnectors[0].port=%PORT% -jar build/libs/Conchordance-1.0.0a.jar server config.yml
